@@ -74,6 +74,7 @@ export default function Home() {
             Templates <span>-&gt;</span>
           </h2>
           <p>Explore starter templates for Next.js.</p>
+          <p>Hello world</p>
         </a>
 
         <a
