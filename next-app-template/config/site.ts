@@ -5,58 +5,42 @@ export const siteConfig = {
 	description: "BDF plant monitoring.",
 	navItems: [
 		{
-			label: "Home",
+			label: "Status",
 			href: "/",
 		},
     {
-      label: "Pricing",
-      href: "/pricing",
+      label: "Graph",
+      href: "/graph",
     },
     {
-      label: "Blog",
-      href: "/blog",
+      label: "Camera",
+      href: "/camera",
     },
     {
-      label: "About",
-      href: "/about",
-    }
+      label: "Log",
+      href: "/log",
+    },
+	{
+		label: "Manual",
+		href: "/manual",
+	},
+	{
+		label: "Settings",
+		href: "/settings",
+	},
+	{
+		label: "Log out",
+		href: "/logout",
+	},
 	],
 	navMenuItems: [
 		{
 			label: "Profile",
 			href: "/profile",
-		},
-		{
-			label: "Dashboard",
-			href: "/dashboard",
-		},
-		{
-			label: "Projects",
-			href: "/projects",
-		},
-		{
-			label: "Team",
-			href: "/team",
-		},
-		{
-			label: "Calendar",
-			href: "/calendar",
-		},
-		{
-			label: "Settings",
-			href: "/settings",
-		},
-		{
-			label: "Help & Feedback",
-			href: "/help-feedback",
-		},
-		{
-			label: "Logout",
-			href: "/logout",
-		},
+		}
 	],
 	links: {
-		github: "https://github.com/nextui-org/nextui",
+		github: "https://github.com/yushin-ito/PlantDX",
 		docs: "https://nextui.org",
 		notion: "https://www.notion.so/To-Valtteri-aabadd7d5f404bc694c3f79e6b2524ef",
 	},

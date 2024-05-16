@@ -44,8 +44,12 @@ export default function RootLayout({
 						<Navbartop />
 						<div className="flex flex-grow">
 						<Navbarleft />
-						<main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+						<main className="container mx-auto max-w7xl pt-16 px-6 flex-grow
+						">
 							{children}
+							<p className="text-center text-sm text-default-500 mt-8">
+								© {new Date().getFullYear()} {siteConfig.name}
+							</p>
 						</main>
 						</div>
 					</div>
