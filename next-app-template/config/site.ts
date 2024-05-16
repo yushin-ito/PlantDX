@@ -1,17 +1,13 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-	name: "Next.js + NextUI",
-	description: "Make beautiful websites regardless of your design experience.",
+	name: "PlantDX",
+	description: "BDF plant monitoring.",
 	navItems: [
 		{
 			label: "Home",
 			href: "/",
 		},
-    {
-      label: "Docs",
-      href: "/docs",
-    },
     {
       label: "Pricing",
       href: "/pricing",
@@ -61,9 +57,7 @@ export const siteConfig = {
 	],
 	links: {
 		github: "https://github.com/nextui-org/nextui",
-		twitter: "https://twitter.com/getnextui",
 		docs: "https://nextui.org",
-		discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev"
+		notion: "https://www.notion.so/To-Valtteri-aabadd7d5f404bc694c3f79e6b2524ef",
 	},
 };
