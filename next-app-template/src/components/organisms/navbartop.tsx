@@ -1,3 +1,5 @@
+// Navbar component for the top of the page
+
 import {
 	Navbar as NextUINavbar,
 	NavbarContent,
@@ -26,7 +28,7 @@ import {
 
 import { Logo } from "@/src/components/atoms/icons";
 
-export const Navbar = () => {
+export const Navbartop = () => {
 	const searchInput = (
 		<Input
 			aria-label="Search"
@@ -49,8 +51,11 @@ export const Navbar = () => {
 	);
 
 	return (
-		<NextUINavbar maxWidth="xl" position="sticky">
-			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+		<NextUINavbar 
+		position="sticky"
+		className="bg-light text-white shadow-lg"
+		>
+			<NavbarContent className="basis-1/5 sm:basis-full" justify="end">
 				<NavbarBrand as="li" className="gap-3 max-w-fit">
 					<NextLink className="flex justify-start items-center gap-1" href="/">
 						<Logo />

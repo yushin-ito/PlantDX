@@ -3,7 +3,8 @@ import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
-import { Navbar } from "@/src/components/organisms/navbar";
+import { Navbartop } from "@/src/components/organisms/navbartop";
+import { Navbarleft } from "../components/organisms/navbarleft";
 import clsx from "clsx";
 
 export const metadata: Metadata = {
@@ -40,10 +41,13 @@ export default function RootLayout({
 			>
 				<Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
 					<div className="relative flex flex-col h-screen">
-						<Navbar />
+						<Navbartop />
+						<div className="flex flex-grow">
+						<Navbarleft />
 						<main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
 							{children}
 						</main>
+						</div>
 					</div>
 				</Providers>
 			</body>
