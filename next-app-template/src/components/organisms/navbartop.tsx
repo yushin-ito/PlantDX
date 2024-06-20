@@ -1,5 +1,6 @@
 // Navbar component for the top of the page
-
+"use client"; // This file is client-side only
+import { useState, useEffect } from "react";
 import {
 	Navbar as NextUINavbar,
 	NavbarContent,
@@ -9,19 +10,16 @@ import {
 	NavbarItem,
 	NavbarMenuItem,
 } from "@nextui-org/navbar";
-import {
-	Autocomplete,
-	AutocompleteSection,
-	AutocompleteItem
-  } from "@nextui-org/autocomplete";
 import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
 import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
-import {animals} from "./data";
-
-
+import { usePathname } from "next/navigation";
+import {
+	Select,
+	SelectItem
+} from "@nextui-org/select"
 
 import { ThemeSwitch } from "@/src/components/molecules/theme-switch";
 import {
@@ -32,6 +30,16 @@ import {
 
 
 export const Navbartop = () => {
+	const [currentPage, setCurrentPage] = useState("Home");
+
+	const pathname = usePathname();
+
+	useEffect(() => {
+		setCurrentPage(pathname === "/" ? "Home" : pathname.slice(1));
+	}, [pathname]);
+
+
+	//TODO: make the search be functional
 	const searchInput = (
 		<Input
 			aria-label="Search"
@@ -70,6 +78,14 @@ export const Navbartop = () => {
                         </h1>
 					</NextLink>
 				</NavbarBrand>
+			</NavbarContent>
+
+			{/* shows the current route name */}
+			<NavbarContent className="basis-1/2">
+				<h1 className="light:text-2xl font-bold
+					dark:text-2xl font-bold text-2xl
+					text-default-500"
+				>{currentPage}</h1>
 			</NavbarContent>
 
 			<NavbarContent
@@ -119,6 +135,20 @@ export const Navbartop = () => {
 					))}
 				</div>
 			</NavbarMenu>
+			<NavbarContent className="hidden lg:flex basis-1/5" justify="end">
+				<Select
+					aria-label="Select language"
+					style={{ width: "100px" }}
+					label="Language"
+					items={[
+						{ label: 'Japan', value: 'JP' },
+						{ label: 'English', value: 'EN' },
+					]
+					}>
+					<SelectItem key={1} value="JP">JP</SelectItem>
+					<SelectItem key={2} value="EN">EN</SelectItem>
+				</Select>
+			</NavbarContent>
 		</NextUINavbar>
 	);
 };

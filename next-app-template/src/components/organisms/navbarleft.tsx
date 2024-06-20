@@ -8,7 +8,7 @@ import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { siteConfig } from "@/config/site";
-
+import IconSelector from "../molecules/iconSelector";
 
 export const Navbarleft = () => {
     return (
@@ -19,22 +19,22 @@ export const Navbarleft = () => {
 			lg:justify-between
 			lg:items-center
 			lg:gap-4
-			px-4
+			px-3
 			py-2
 			lg:px-6
 			lg:py-4
 			lg:sticky
 			top-0
-			z-50
+			z-5
 			w-full
 			lg:w-auto
-			h-16
+			h-8
 			lg:h-auto
 			lg:min-h-screen
 			lg:max-h-screen
 			overflow-y-auto
 		">
-            			{/* Logo and pagination */}
+            {/* Logo and pagination */}
 			<NavbarContent className="basis-1/5 sm:basis-full
             flex-col
             " justify="end">
@@ -53,8 +53,9 @@ export const Navbarleft = () => {
 								)}
 								color="primary"
 								href={item.href}
+								
 							>
-								{item.label}
+								<IconSelector icon={item.label} />  {item.label}
 							</NextLink>
 						</NavbarItem>
 					))}
