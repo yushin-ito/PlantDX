@@ -1,26 +1,45 @@
 'use client'
 
-import React, { useState } from 'react';
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
+import React, {useState, useEffect} from 'react';
+import {Card, CardHeader, CardFooter} from "@nextui-org/card";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import { set } from 'date-fns';
 
-const ColorCard = ({title, color, processName}: {title: string, color: string, processName: string}) => {
-    const [temperature, setTemperature] = useState(81);
+const ColorCard = ({processName, processDone}: {processName: string, processDone: boolean}) => {
+    const [color, setColor] = useState('red');
+    const [stateString, setStateString] = useState('incomplete');
+    const [icon, setIcon] = useState(<TaskAltIcon />);
+
+    useEffect(() => {
+        if (processDone) {
+            setColor('green');
+            setStateString('complete');
+            setIcon(<TaskAltIcon />);
+        } else {
+            setColor('red');
+            setStateString('incomplete');
+            setIcon(<ErrorOutlineIcon />);
+        }
+    }, [processDone]);
 
     return (
         <Card
-        style={{width: '200px', backgroundColor: color, height: '180px'}}
+        style={{width: '120px', backgroundColor: color, height: '120px'}}
         >
             <CardHeader>
-                <p>hi</p>           
+                <div
+                className='flex flex-col items-center justify-center gap-2'
+                >
+                    {icon}
+                    <h1
+                    className='text-xl font-bold text-black-500'
+                    >{stateString}</h1>
+                </div>         
             </CardHeader>
-            <CardBody>
-            <h1
-            className='font-bold text-black-500'
-            >{title}</h1>
-            </CardBody>
             <CardFooter>
                 <p
-                style={{fontSize: '12px'}}
+                style={{fontSize: '12px', justifyContent: 'center', alignContent: 'center'}}
                 >{processName}</p>
             </CardFooter>
         </Card>

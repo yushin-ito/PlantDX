@@ -31,7 +31,7 @@ export default function Home() {
 
 			<div className="flex flex-col items-center justify-center gap-4">
 			<StatusCardBig
-				title="Main Tank"
+				title="Status"
 			/>
 
 			<div className="flex flex-row items-center justify-center gap-4">

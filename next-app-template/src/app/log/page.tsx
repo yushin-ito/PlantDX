@@ -1,9 +1,11 @@
-import { title } from "@/src/components/primitives";
+import LogCard from "@/src/components/organisms/logCard";
 
 export default function BlogPage() {
 	return (
-		<div>
-			<h1 className={title()}>Log</h1>
+		<div
+		className="flex flex-row items-center justify-center gap-4"
+		>
+			<LogCard />
 		</div>
 	);
 }

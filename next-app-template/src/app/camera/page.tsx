@@ -1,9 +1,11 @@
-import { title } from "@/src/components/primitives";
+import CameraCard from "@/src/components/organisms/cameraCard";
 
 export default function AboutPage() {
 	return (
-		<div>
-			<h1 className={title()}>Camera</h1>
-		</div>
+		<>
+			<div className="flex flex-col items-center justify-start gap-4">
+			<CameraCard />
+			</div>
+		</>
 	);
 }
