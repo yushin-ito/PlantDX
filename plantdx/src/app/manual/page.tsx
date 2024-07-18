@@ -14,7 +14,6 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useSignOut } from "@/src/hook/auth";
 
 export default function BlogPage() {
-<<<<<<< HEAD:next-app-template/src/app/blog/page.tsx
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
@@ -117,11 +116,4 @@ export default function BlogPage() {
       </div>
     </div>
   );
-=======
-	return (
-		<div>
-			<h1 className={title()}>Manual</h1>
-		</div>
-	);
->>>>>>> b4ad4bdc6461dfa08c635ec922b7576b9123086d:next-app-template/src/app/manual/page.tsx
 }

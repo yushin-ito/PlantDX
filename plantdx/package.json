@@ -1,6 +1,11 @@
 {
   "name": "plantdx",
   "version": "0.0.1",
+  "description": "Cutting-Edge AI and IoT for Superior Biodiesel Fuel Production.",
+  "main": "next.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -51,11 +56,5 @@
     "tailwind-variants": "^0.1.20",
     "tailwindcss": "3.4.3",
     "typescript": "5.0.4"
-  },
-  "description": "This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).",
-  "main": "next.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {}
+  }
 }
