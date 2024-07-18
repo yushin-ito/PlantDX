@@ -8,24 +8,24 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const IconSelector = ({ icon }: { icon: string }) => {
-	switch (icon) {
-		case "Home":
-			return <HomeIcon />;
-		case "Graph":
-			return <BarChartIcon />;
-		case "Camera":
-			return <CameraIcon />;
-		case "Log":
-			return <AccesTimeIcon />;
-		case "Manual":
-			return <BackHandIcon />;
-		case "Settings":
-			return <SettingsIcon />;
-		case "Log out":
-			return <LogoutIcon />;
-		default:
-			return <HomeIcon />;
-	}
-}
+  switch (icon) {
+    case "Home":
+      return <HomeIcon />;
+    case "Graph":
+      return <BarChartIcon />;
+    case "Camera":
+      return <CameraIcon />;
+    case "Log":
+      return <AccesTimeIcon />;
+    case "Manual":
+      return <BackHandIcon />;
+    case "Settings":
+      return <SettingsIcon />;
+    case "Log out":
+      return <LogoutIcon />;
+    default:
+      return <HomeIcon />;
+  }
+};
 
 export default IconSelector;

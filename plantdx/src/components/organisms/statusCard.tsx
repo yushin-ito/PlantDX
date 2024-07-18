@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 
-import TempVisual from "../molecules/tempVisual";
-import WaterLevelVisual from "../molecules/waterLevelVisual";
+import TempVisual from "../molecules/TempVisual";
+import WaterLevelVisual from "../molecules/WaterLevelVisual";
 
 const StatusCard = ({
   showsTemp,
@@ -16,7 +16,7 @@ const StatusCard = ({
   title: string;
   width: number;
 }) => {
-  let data = [190].map((value, index) => ({ waterlevel: value }));
+  let data = [190].map((value) => ({ waterlevel: value }));
   const [temperature, setTemperature] = useState(81);
 
   return (
@@ -30,7 +30,6 @@ const StatusCard = ({
         </CardBody>
       )}
       <CardFooter>
-        {/* This is gonig to be its own module */}
         {showsWaterLevel && <WaterLevelVisual data={data} />}
       </CardFooter>
     </Card>

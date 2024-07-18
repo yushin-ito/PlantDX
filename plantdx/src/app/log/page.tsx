@@ -1,11 +1,11 @@
-import LogCard from "@/src/components/organisms/logCard";
+import LogCard from "@/src/components/organisms/LogCard";
 
-export default function BlogPage() {
-	return (
-		<div
-		className="flex flex-row items-center justify-center gap-4"
-		>
-			<LogCard />
-		</div>
-	);
-}
+const LogPage = () => {
+  return (
+    <div className="flex flex-row items-center justify-center gap-4">
+      <LogCard />
+    </div>
+  );
+};
+
+export default LogPage;

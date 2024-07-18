@@ -13,7 +13,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useSignOut } from "@/src/hook/auth";
 
-export default function BlogPage() {
+const ManualPage = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
@@ -116,4 +116,6 @@ export default function BlogPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ManualPage;
