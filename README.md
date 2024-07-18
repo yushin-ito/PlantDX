@@ -1,4 +1,4 @@
-<h1>plantDX</h1>
+<h1>PlantDX</h1>
 
 <div align="left">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
@@ -49,8 +49,7 @@ So we began research to develop an Image Analysis AI that classifies the achieve
 <h2>🌐 System</h2>
 <div align="center">
   <picture>
-    <img src="https://github.com/yushin-ito/PlantDX/assets/75526539/fbb01ea2-44c3-4aa5-aa46-e998afadcfc4
-    " width="80%">
+    <img src="https://github.com/yushin-ito/PlantDX/assets/75526539/fbb01ea2-44c3-4aa5-aa46-e998afadcfc4" width="80%">
   </picture>
 </div>
 
@@ -72,7 +71,7 @@ So we began research to develop an Image Analysis AI that classifies the achieve
   </li>
   <br>
   <picture>
-      <img src="https://github.com/yushin-ito/PlantDX/assets/75526539/c5f57257-c6b9-4799-b4d7-855d61e6004a">
+      <img src="https://github.com/user-attachments/assets/f8f01847-3748-47e5-98e7-20790cccbb36">
   </picture>
   <br>
   <br>

@@ -11,6 +11,7 @@ import {
   dehydrate,
   HydrationBoundary,
 } from "@tanstack/react-query";
+import { AuthProvider } from "../context/AuthContext";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -22,12 +23,14 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (
-    <NextUIProvider navigate={router.push}>
-      <QueryClientProvider client={queryClient}>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-        </HydrationBoundary>
-      </QueryClientProvider>
-    </NextUIProvider>
+    <AuthProvider>
+      <NextUIProvider navigate={router.push}>
+        <QueryClientProvider client={queryClient}>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+          </HydrationBoundary>
+        </QueryClientProvider>
+      </NextUIProvider>
+    </AuthProvider>
   );
 }

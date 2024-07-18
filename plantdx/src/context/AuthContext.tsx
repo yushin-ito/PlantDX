@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
-import { createContext, ReactNode, useEffect, useState } from "react";
+"use client";
 
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import supabase from "@/src/supabase";
 
@@ -14,12 +14,12 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
-const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
+const AuthContext = createContext<AuthContextProps | null>(null);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error | undefined>(undefined);
 
   useEffect(() => {
     (async () => {
@@ -46,5 +46,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  return AuthContext.Provider({ children, value: { session, error, isLoading } });
+  return (
+    <AuthContext.Provider value={{ session, error, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
