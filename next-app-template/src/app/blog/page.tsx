@@ -6,9 +6,15 @@ import {
   usePostUser,
   useUpdateUser,
 } from "@/src/hook/user/mutate";
+import supabase from "@/src/supabase";
+import { Modal, ModalContent, useDisclosure } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useSignOut } from "@/src/hook/auth";
 
 export default function BlogPage() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
       onSuccess: () => {
@@ -36,6 +42,16 @@ export default function BlogPage() {
       },
       onError: () => {
         console.log("[Delete] Error");
+      },
+    });
+
+  const { mutateAsync: mutateAsyncSignOut, isPending: isLoadingSignOut } =
+    useSignOut({
+      onSuccess: () => {
+        console.log("[SignOut] Success");
+      },
+      onError: () => {
+        console.log("[SignOut] Error");
       },
     });
 
@@ -81,6 +97,22 @@ export default function BlogPage() {
         >
           Delete User Data
         </Button>
+        <Button onPress={onOpen} color="primary">
+          Sign Up
+        </Button>
+        <Button
+          onPress={async () => {
+            console.log("Button pressed");
+          }}
+          color="primary"
+        >
+          Sign Out
+        </Button>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent className="px-12 pt-8">
+            <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
+          </ModalContent>
+        </Modal>
       </div>
     </div>
   );

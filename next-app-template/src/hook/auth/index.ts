@@ -22,9 +22,11 @@ export type SignOutResponse = Awaited<ReturnType<typeof signOut>>;
 
 const signUpWithEmail = async (credentials: SignUpWithPasswordCredentials) => {
   const { data, error } = await supabase.auth.signUp(credentials);
+
   if (error) {
     throw error;
   }
+
   return data;
 };
 
