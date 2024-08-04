@@ -13,12 +13,12 @@ import {
 } from "@tanstack/react-query";
 import { AuthProvider } from "../context/AuthContext";
 
-export interface ProvidersProps {
+type ProvidersProps = {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
-}
+};
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+const Providers = ({ children, themeProps }: ProvidersProps) => {
   const router = useRouter();
   const [queryClient] = React.useState(() => new QueryClient());
 
@@ -33,4 +33,6 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       </NextUIProvider>
     </AuthProvider>
   );
-}
+};
+
+export default Providers;

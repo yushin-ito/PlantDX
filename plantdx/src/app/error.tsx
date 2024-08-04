@@ -1,14 +1,12 @@
 "use client";
-
 import { useEffect } from "react";
 
-export default function Error({
-  error,
-  reset,
-}: {
+type ErrorProps = {
   error: Error;
   reset: () => void;
-}) {
+};
+
+const Error = ({ error, reset }: ErrorProps) => {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -19,4 +17,6 @@ export default function Error({
       <button onClick={() => reset()}>Try again</button>
     </div>
   );
-}
+};
+
+export default Error;

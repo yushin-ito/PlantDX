@@ -1,12 +1,12 @@
 "use client";
 
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
+import { AuthError, Session } from "@supabase/supabase-js";
 import supabase from "@/src/supabase";
 
 type AuthContextProps = {
   session: Session | null;
-  error: Error | undefined;
+  error: AuthError | null;
   isLoading: boolean;
 };
 
@@ -14,21 +14,23 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
-const AuthContext = createContext<AuthContextProps | null>(null);
+export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | undefined>(undefined);
+  const [error, setError] = useState<AuthError | null>(null);
 
   useEffect(() => {
     (async () => {
       const {
         data: { session },
+        error,
       } = await supabase.auth.getSession();
       if (session) {
         setSession(session);
       }
+      setError(error);
       setIsLoading(false);
     })();
 

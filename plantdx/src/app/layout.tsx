@@ -1,13 +1,13 @@
 import "@/styles/globals.css";
-
 import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Providers } from "./providers";
+import Providers from "./providers";
 import NavbarTop from "@/src/components/organisms/NavbarTop";
 import NavbarLeft from "../components/organisms/NavbarLeft";
 import clsx from "clsx";
 import { ReactNode } from "react";
+import useAuth from "../hook/auth/useAuth";
 
 export const metadata: Metadata = {
   title: {
