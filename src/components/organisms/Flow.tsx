@@ -1,11 +1,13 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { ReactFlow, Controls, useNodesState, useEdgesState } from "reactflow";
+import { ReactFlow, useNodesState, useEdgesState } from "reactflow";
 
 import "reactflow/dist/style.css";
+
 import CustomEdge from "../molecules/CustomEdge";
 import CustomNode from "../molecules/CustomNode";
+import CustomControls from "../molecules/CustomControls";
 
 const initialNodes = [
   {
@@ -85,7 +87,7 @@ const initialNodes = [
       type: "status",
     },
     type: "custom",
-  }
+  },
 ];
 
 const initialEdges = [
@@ -140,7 +142,7 @@ const Flow = memo(() => {
       edgeTypes={edgeTypes}
       nodeTypes={nodeTypes}
     >
-      <Controls />
+      <CustomControls />
     </ReactFlow>
   );
 });

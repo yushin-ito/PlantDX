@@ -21,6 +21,9 @@ const config: Config = {
           900: "#0000d1",
         },
       },
+      zIndex: {
+        controls: "1000",
+      },
     },
   },
   plugins: [],
