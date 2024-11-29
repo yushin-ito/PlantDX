@@ -39,7 +39,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
         className={`${[inter, noto_sans_jp].map((f) => f.variable).join(" ")}`}
       >
         <Toaster />
-        <main className="h-full w-screen bg-gray-50">{children}</main>
+        <main className="h-full w-screen">{children}</main>
       </body>
     </html>
   );

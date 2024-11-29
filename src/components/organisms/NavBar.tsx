@@ -42,7 +42,7 @@ const NavBar = memo(() => {
   ];
 
   return (
-    <VStack className="h-full w-72 shrink-0 items-center justify-between bg-white py-12 shadow-md">
+    <VStack className="-z-0 h-full w-72 shrink-0 items-center justify-between bg-white py-12 shadow-md">
       <VStack className=" w-full items-center space-y-8">
         {labels.map(({ label, title, icon: Icon }, index) => (
           <Link key={index} href={label} className="w-4/5">
