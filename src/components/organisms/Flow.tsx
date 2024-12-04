@@ -1,13 +1,28 @@
 "use client";
 
-import { memo, useMemo } from "react";
-import { ReactFlow, useNodesState, useEdgesState } from "reactflow";
-
-import "reactflow/dist/style.css";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
+import {
+  ReactFlow,
+  useNodesState,
+  useEdgesState,
+  Connection,
+  addEdge,
+  reconnectEdge,
+  Edge,
+} from "reactflow";
+import { Plus } from "lucide-react";
+import { z } from "zod";
 
 import CustomEdge from "../molecules/CustomEdge";
 import CustomNode from "../molecules/CustomNode";
 import CustomControls from "../molecules/CustomControls";
+import CustomConnectionLine from "../molecules/CustomConnectionLine";
+import PostSensorDialog from "../molecules/PostSensorDialog";
+import { Dialog } from "../ui/dialog";
+import { Button } from "../ui/button";
+import { SensorSchema } from "@/schemas";
+
+import "reactflow/dist/style.css";
 
 const initialNodes = [
   {
@@ -19,7 +34,7 @@ const initialNodes = [
         volume: 15,
         temperature: -1,
       },
-      type: "tank",
+      type: ["volume"],
     },
     type: "custom",
   },
@@ -32,7 +47,7 @@ const initialNodes = [
         volume: -1,
         temperature: 75,
       },
-      type: "heater",
+      type: ["temperature"],
     },
     type: "custom",
   },
@@ -45,7 +60,7 @@ const initialNodes = [
         volume: 12,
         temperature: 80,
       },
-      type: "hybrid",
+      type: ["volume", "temperature"],
     },
     type: "custom",
   },
@@ -58,7 +73,7 @@ const initialNodes = [
         volume: -1,
         temperature: 80,
       },
-      type: "heater",
+      type: ["temperature"],
     },
     type: "custom",
   },
@@ -71,20 +86,7 @@ const initialNodes = [
         volume: 15,
         temperature: -1,
       },
-      type: "tank",
-    },
-    type: "custom",
-  },
-  {
-    id: "6",
-    position: { x: 400, y: 0 },
-    data: {
-      title: "ステータス",
-      value: {
-        volume: -1,
-        temperature: -1,
-      },
-      type: "status",
+      type: ["volume"],
     },
     type: "custom",
   },
@@ -96,54 +98,112 @@ const initialEdges = [
     source: "1",
     target: "2",
     type: "custom",
-    sourceHandle: "right",
-    targetHandle: "left",
+    sourceHandle: "source-right",
+    targetHandle: "target-left",
   },
   {
     id: "3-2",
     source: "3",
     target: "2",
     type: "custom",
-    sourceHandle: "right",
-    targetHandle: "left",
+    sourceHandle: "source-right",
+    targetHandle: "target-left",
   },
   {
     id: "2-4",
     source: "2",
     target: "4",
     type: "custom",
-    sourceHandle: "right",
-    targetHandle: "top",
+    sourceHandle: "source-right",
+    targetHandle: "target-top",
   },
   {
     id: "4-5",
     source: "4",
     target: "5",
     type: "custom",
-    sourceHandle: "right",
-    targetHandle: "left",
+    sourceHandle: "source-right",
+    targetHandle: "target-left",
   },
 ];
 
 const Flow = memo(() => {
+  const edgeReconnectSuccessful = useRef(true);
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [readOnly, setReadOnly] = useState(false);
 
   const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
   const edgeTypes = useMemo(() => ({ custom: CustomEdge }), []);
 
+  const onConnect = useCallback(
+    (params: Connection) => {
+      setEdges((eds) => addEdge({ ...params, type: "custom" }, eds));
+    },
+    [setEdges]
+  );
+
+  const onReconnectStart = useCallback(() => {
+    edgeReconnectSuccessful.current = false;
+  }, []);
+
+  const onReconnect = useCallback(
+    (oldEdge: Edge, newConnection: Connection) => {
+      edgeReconnectSuccessful.current = true;
+      setEdges((els) => reconnectEdge(oldEdge, newConnection, els));
+    },
+    [setEdges]
+  );
+
+  const onReconnectEnd = useCallback(
+    (_event: MouseEvent | TouchEvent, edge: Edge) => {
+      if (!edgeReconnectSuccessful.current) {
+        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      }
+
+      edgeReconnectSuccessful.current = true;
+    },
+    [setEdges]
+  );
+
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
+
+  const onSubmit = (values: z.infer<typeof SensorSchema>) => {
+    console.log(values);
+    setIsOpenDialog(false);
+  };
+
   return (
-    <ReactFlow
-      fitView
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      edgeTypes={edgeTypes}
-      nodeTypes={nodeTypes}
-    >
-      <CustomControls />
-    </ReactFlow>
+    <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
+      <ReactFlow
+        fitView
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onReconnectStart={onReconnectStart}
+        onReconnect={onReconnect}
+        onReconnectEnd={onReconnectEnd}
+        edgeTypes={edgeTypes}
+        nodeTypes={nodeTypes}
+        connectionLineComponent={CustomConnectionLine}
+        nodesConnectable={!readOnly}
+      >
+        <CustomControls readOnly={readOnly} setReadOnly={setReadOnly} />
+        <Button
+          variant="brand"
+          className="absolute bottom-8 right-8 z-fab size-12 rounded-full shadow-md"
+          onClick={() => setIsOpenDialog(true)}
+        >
+          <Plus className="size-6" />
+        </Button>
+      </ReactFlow>
+      <PostSensorDialog
+        onSubmit={onSubmit}
+        onClose={() => setIsOpenDialog(false)}
+      />
+    </Dialog>
   );
 });
 

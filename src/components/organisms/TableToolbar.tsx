@@ -1,6 +1,7 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
+import { Search } from "lucide-react";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -11,6 +12,7 @@ import {
   DropdownMenuCheckboxItem,
 } from "../ui/dropdown-menu";
 import HStack from "../atoms/HStack";
+import { Card, CardContent } from "../ui/card";
 
 type TableToolbarProps<TData> = {
   table: Table<TData>;
@@ -19,14 +21,23 @@ type TableToolbarProps<TData> = {
 const TableToolbar = <TData,>({ table }: TableToolbarProps<TData>) => {
   return (
     <HStack className="items-center justify-between">
-      <Input
-        placeholder="ログを検索する"
-        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn("title")?.setFilterValue(event.target.value)
-        }
-        className="h-8 w-[200px] placeholder:text-xs dark:bg-neutral-950 dark:text-neutral-50"
-      />
+      <Card className="rounded-md">
+        <CardContent className="px-2 py-px">
+          <HStack className="items-center">
+            <Search className="mr-2 size-4 shrink-0 opacity-50" />
+            <Input
+              placeholder="ログを検索する"
+              value={
+                (table.getColumn("title")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("title")?.setFilterValue(event.target.value)
+              }
+              className="flex h-8 w-[200px] border-none px-0 placeholder:text-xs"
+            />
+          </HStack>
+        </CardContent>
+      </Card>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
@@ -48,7 +59,7 @@ const TableToolbar = <TData,>({ table }: TableToolbarProps<TData>) => {
                   checked={column.getIsVisible()}
                   onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 >
-                  {typeof column.columnDef.header}
+                  {column.columnDef.meta?.title}
                 </DropdownMenuCheckboxItem>
               );
             })}

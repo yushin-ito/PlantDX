@@ -27,6 +27,8 @@ import TablePagination from "../organisms/TablePagination";
 import TableToolbar from "../organisms/TableToolbar";
 import TableColumns from "../molecules/TableColumns";
 import type { Log } from "@/types";
+import { Card } from "../ui/card";
+import VStack from "../atoms/VStack";
 
 const data = [
   {
@@ -436,6 +438,10 @@ const Log = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 9,
+  });
 
   const table = useReactTable({
     data,
@@ -445,12 +451,14 @@ const Log = () => {
       columnVisibility,
       rowSelection,
       columnFilters,
+      pagination,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -460,9 +468,9 @@ const Log = () => {
   });
 
   return (
-    <div className="w-[90%] space-y-4 self-center">
+    <VStack className="mt-4 w-full space-y-4 px-8">
       <TableToolbar table={table} />
-      <div className="rounded-lg border dark:border-neutral-800 dark:bg-neutral-950">
+      <Card>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -511,9 +519,9 @@ const Log = () => {
             )}
           </TableBody>
         </Table>
-      </div>
+      </Card>
       <TablePagination table={table} />
-    </div>
+    </VStack>
   );
 };
 

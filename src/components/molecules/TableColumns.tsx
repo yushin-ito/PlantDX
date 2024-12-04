@@ -57,11 +57,11 @@ const ColumnHeader = <TData, TValue>({
         <Button variant="ghost" size="sm" className="-ml-3">
           <span>{title}</span>
           {column.getIsSorted() === "desc" ? (
-            <ArrowDown />
+            <ArrowDown className="size-4" />
           ) : column.getIsSorted() === "asc" ? (
-            <ArrowUp />
+            <ArrowUp className="size-4" />
           ) : (
-            <ChevronsUpDown />
+            <ChevronsUpDown className="size-4" />
           )}
         </Button>
       </DropdownMenuTrigger>
@@ -91,14 +91,14 @@ const TableColumns: ColumnDef<Log>[] = [
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        className="translate-y-[2px]"
+        className="ml-1 translate-y-[2px]"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className="translate-y-[2px]"
+        className="ml-1 translate-y-[2px]"
       />
     ),
     enableSorting: false,
@@ -106,15 +106,19 @@ const TableColumns: ColumnDef<Log>[] = [
   },
   {
     accessorKey: "date",
+    meta: {
+      title: "日付",
+    },
     header: ({ column }) => <ColumnHeader column={column} title="日付" />,
     cell: ({ row }) => (
-      <div className="max-w-[120px]">
-        {format(new Date(row.getValue("date")), "yyyy/MM/dd HH:mm")}
-      </div>
+      <div>{format(new Date(row.getValue("date")), "yyyy/MM/dd HH:mm")}</div>
     ),
   },
   {
     accessorKey: "title",
+    meta: {
+      title: "内容",
+    },
     header: ({ column }) => <ColumnHeader column={column} title="内容" />,
     cell: ({ row }) => {
       return (
@@ -124,13 +128,19 @@ const TableColumns: ColumnDef<Log>[] = [
   },
   {
     accessorKey: "command",
+    meta: {
+      title: "コマンド",
+    },
     header: ({ column }) => <ColumnHeader column={column} title="コマンド" />,
     cell: ({ row }) => {
-      return <div className="max-w-[120px]">{row.getValue("command")}</div>;
+      return <div>{row.getValue("command")}</div>;
     },
   },
   {
     accessorKey: "status",
+    meta: {
+      title: "ステータス",
+    },
     header: ({ column }) => <ColumnHeader column={column} title="ステータス" />,
     cell: ({ row }) => {
       const status = statuses.find(
@@ -155,7 +165,7 @@ const TableColumns: ColumnDef<Log>[] = [
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="size-8 p-0">
-            <MoreHorizontal />
+            <MoreHorizontal className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">

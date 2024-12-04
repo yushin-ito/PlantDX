@@ -1,7 +1,7 @@
 "use client";
 
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { Fragment } from "react";
+import { CSSProperties, Fragment } from "react";
 
 import {
   ChartConfig,
@@ -65,14 +65,14 @@ const Chart = () => {
                       style={
                         {
                           "--color-bg": `var(--color-${name})`,
-                        } as React.CSSProperties
+                        } as CSSProperties
                       }
                     />
                     {chartConfig[name as keyof typeof chartConfig]?.label ||
                       name}
-                    <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                    <div className="ml-auto flex items-baseline gap-0.5 font-mono tabular-nums">
                       {value}
-                      <span className="font-normal">°C</span>
+                      <span>°C</span>
                     </div>
                   </Fragment>
                 )}

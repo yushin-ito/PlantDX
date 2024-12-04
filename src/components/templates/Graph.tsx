@@ -8,8 +8,8 @@ import SensorSwitcher from "../molecules/SensorSwitcher";
 
 const Graph = () => {
   return (
-    <HStack className="w-full space-x-6 px-8">
-      <VStack className="w-full items-center overflow-auto space-y-6">
+    <HStack className="mt-4 w-full space-x-6 px-10">
+      <VStack className="w-full items-center space-y-6 overflow-auto">
         <Card className="w-full">
           <CardHeader className="w-full">
             <HStack className="w-full items-center justify-between">

@@ -57,7 +57,7 @@ const NavBar = memo(() => {
   };
 
   return (
-    <VStack className="h-full w-60 items-center justify-between border-r px-6 py-12 dark:border-neutral-600">
+    <VStack className="h-full w-60 items-center justify-between border-r px-6 py-12 dark:border-neutral-800">
       <VStack className="w-full space-y-8">
         {Object.entries(routes).map(([key, { title, icon: Icon }], index) => (
           <Link key={index} href={key}>
@@ -65,7 +65,7 @@ const NavBar = memo(() => {
               variant={basename === key ? "brand" : "ghost"}
               className="relative w-full rounded-lg"
             >
-              <Icon className="absolute left-5 size-5" />
+              <Icon className="absolute left-5 size-[18px]" />
               {title}
             </Button>
           </Link>
@@ -77,7 +77,7 @@ const NavBar = memo(() => {
         className="relative w-full rounded-lg"
         onClick={onClick}
       >
-        <LogOut className="absolute left-5 size-5" />
+        <LogOut className="absolute left-5 size-[18px]" />
         ログアウト
       </Button>
     </VStack>

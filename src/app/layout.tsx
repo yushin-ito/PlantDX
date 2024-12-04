@@ -39,7 +39,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => (
       className={`${[inter, noto_sans_jp].map((f) => f.variable).join(" ")}`}
     >
       <ToastProvider />
-      <main className="h-full w-screen">
+      <main className="h-full w-screen bg-white dark:bg-neutral-950">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

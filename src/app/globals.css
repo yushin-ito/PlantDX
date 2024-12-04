@@ -26,19 +26,3 @@ body {
     @apply text-[#151d48] dark:text-white font-medium;
   }
 }
-
-@layer utilities {
-  .hidden-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hidden-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .btn-brand {
-    @apply bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white;
-  }
-  .btn-transparent {
-    @apply hover:bg-gray-100 dark:hover:bg-zinc-800;
-  }
-}

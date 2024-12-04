@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import { memo } from "react";
 import { EdgeProps, getSmoothStepPath } from "reactflow";
 
 const CustomEdge = memo(
@@ -13,12 +13,22 @@ const CustomEdge = memo(
     sourcePosition,
     targetPosition,
   }: EdgeProps) => {
+    const sourceXOffset =
+      sourcePosition === "right" ? -4 : sourcePosition === "left" ? 4 : 0;
+    const sourceYOffset =
+      sourcePosition === "top" ? 4 : sourcePosition === "bottom" ? -4 : 0;
+
+    const targetXOffset =
+      targetPosition === "right" ? -4 : targetPosition === "left" ? 4 : 0;
+    const targetYOffset =
+      targetPosition === "top" ? 4 : targetPosition === "bottom" ? -4 : 0;
+
     const [edgePath] = getSmoothStepPath({
-      sourceX: sourceX - 4,
-      sourceY,
+      sourceX: sourceX + sourceXOffset,
+      sourceY: sourceY + sourceYOffset,
       sourcePosition,
-      targetX: targetX + 4,
-      targetY,
+      targetX: targetX + targetXOffset,
+      targetY: targetY + targetYOffset,
       targetPosition,
       borderRadius: 16,
     });
