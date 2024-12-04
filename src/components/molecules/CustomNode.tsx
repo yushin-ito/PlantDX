@@ -44,10 +44,12 @@ const CustomNode = memo(({ data }: CustomNodeProps) => {
 
   if (data.type === "status") {
     return (
-      <VStack className="space-y-6 rounded-xl bg-white p-6 shadow-md">
+      <VStack className="space-y-6 rounded-xl bg-white p-6 shadow-sm dark:bg-neutral-800">
         <VStack>
           <h2 className="font-bold">ステータス</h2>
-          <p className="text-xs text-gray-500">2024/01/01 00:00</p>
+          <p className="text-xs text-neutral-400 dark:text-neutral-200">
+            2024/01/01 00:00
+          </p>
         </VStack>
 
         <HStack className="space-x-6">
@@ -65,13 +67,15 @@ const CustomNode = memo(({ data }: CustomNodeProps) => {
                 }`}
               >
                 {completed ? (
-                  <CheckCircle className="size-5 text-white" />
+                  <CheckCircle className="size-5" />
                 ) : (
-                  <AlertCircle className="size-5 text-white" />
+                  <AlertCircle className="size-5" />
                 )}
               </Center>
               <VStack className="space-y-[2px]">
-                <h3 className="font-bold">{completed ? "完了" : "未完了"}</h3>
+                <h3 className="font-bold text-[#151d48]">
+                  {completed ? "完了" : "未完了"}
+                </h3>
                 <p className="text-xs text-gray-500">{title}</p>
               </VStack>
             </VStack>
@@ -82,7 +86,7 @@ const CustomNode = memo(({ data }: CustomNodeProps) => {
   }
 
   return (
-    <VStack className="w-[240px] items-center space-y-4 rounded-xl bg-white py-4 shadow-md">
+    <VStack className="w-[240px] items-center space-y-4 rounded-xl bg-white py-4 shadow-sm dark:bg-neutral-800">
       {/* タイトル */}
       <h2 className="font-semibold">{data.title}</h2>
 
@@ -111,17 +115,17 @@ const CustomNode = memo(({ data }: CustomNodeProps) => {
           {Array.from({ length: NUMBER_OF_SCALE }).map((_, index) => (
             <HStack key={index} className="w-full items-center space-x-2">
               {/* ラベル */}
-              <span className="w-8 text-right text-xs text-gray-400">
+              <span className="w-8 text-right text-xs text-neutral-400 dark:text-neutral-200">
                 {(NUMBER_OF_SCALE - 1) * SCALE - index * SCALE}
               </span>
               {/* 線 */}
               <Center className="h-6 w-40">
-                <div className="w-full border-t border-gray-400" />
+                <div className="w-full border-t border-neutral-400 dark:border-neutral-200" />
               </Center>
             </HStack>
           ))}
           <div
-            className="absolute bottom-3 left-10 w-40 bg-blue-100 opacity-60"
+            className="absolute bottom-3 left-10 w-40 bg-blue-100 opacity-60 dark:bg-blue-500"
             style={{
               height: `${(data.value.volume / SCALE) * 24}px`,
             }}

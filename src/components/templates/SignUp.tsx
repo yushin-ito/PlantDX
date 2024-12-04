@@ -64,7 +64,7 @@ const SignUp = () => {
 
   return (
     <Center className="size-full">
-      <VStack className="w-[420px] space-y-6 rounded-xl bg-white p-8 shadow-md">
+      <VStack className="w-[420px] space-y-6 rounded-xl bg-white p-8 shadow-sm dark:bg-neutral-900">
         <div className="text-center text-xl font-bold">新規登録</div>
 
         <Form {...form}>
@@ -73,21 +73,13 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="email"
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>メールアドレス</FormLabel>
                     <FormControl>
-                      <Input
-                        className={`rounded-md border-2 bg-white py-5 shadow-none focus:border-brand-600 focus-visible:ring-0 ${
-                          fieldState.invalid
-                            ? "!border-red-500"
-                            : "border-gray-300"
-                        }`}
-                        {...field}
-                        disabled={isPending}
-                      />
+                      <Input {...field} disabled={isPending} />
                     </FormControl>
-                    <FormMessage className="text-red-500" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -95,17 +87,12 @@ const SignUp = () => {
               <FormField
                 control={form.control}
                 name="password"
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>パスワード</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
-                          className={`rounded-md border-2 bg-white py-5 shadow-none focus:border-brand-600 focus-visible:ring-0 ${
-                            fieldState.invalid
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
                           type={visible ? "text" : "password"}
                           {...field}
                           disabled={isPending}
@@ -122,25 +109,26 @@ const SignUp = () => {
                         </div>
                       </div>
                     </FormControl>
-                    <FormMessage className="text-red-500" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
 
               {error && (
-                <HStack className="space-x-1 rounded-md bg-red-100 p-3 text-sm text-red-500">
+                <HStack className="space-x-1 rounded-md bg-red-100 p-3 text-sm text-red-500 dark:bg-red-500 dark:text-white">
                   <AlertCircle className="size-5" />
-                  <div>{error}</div>
+                  <span>{error}</span>
                 </HStack>
               )}
             </VStack>
 
             <Button
               type="submit"
-              className="w-full bg-brand-600 py-5 text-white hover:bg-brand-700 active:bg-brand-800"
+              variant="brand"
+              className="w-full"
               disabled={isPending}
             >
-              {isPending && <Loader2 className="animate-spin" />}
+              {isPending && <Loader2 className="size-5 animate-spin" />}
               <span>はじめる</span>
             </Button>
           </form>

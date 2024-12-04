@@ -27,7 +27,7 @@ const CustomEdge = memo(
       <g>
         <path
           id={id}
-          className="fill-none stroke-gray-400 stroke-2"
+          className="fill-none stroke-neutral-400 stroke-2 dark:stroke-neutral-200"
           d={edgePath}
         />
       </g>

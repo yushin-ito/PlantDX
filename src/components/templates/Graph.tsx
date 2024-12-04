@@ -1,46 +1,38 @@
-import { ChevronDown } from "lucide-react";
-
-import Center from "../atoms/Center";
 import HStack from "../atoms/HStack";
 import VStack from "../atoms/VStack";
-import Analysis from "../organisms/Analysis";
+import ChartToolbar from "../organisms/ChartToolbar";
+import Analytics from "../organisms/Analytics";
 import Chart from "../organisms/Chart";
-import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import SensorSwitcher from "../molecules/SensorSwitcher";
 
 const Graph = () => {
   return (
-    <Center className="size-full">
-      <VStack className="w-[90%] space-y-12 rounded-xl bg-white px-10 py-8 shadow-md">
-        <HStack className="justify-between">
-          <VStack className="space-y-1">
-            <h2 className="text-xl font-bold">MACHタンク</h2>
-            <p className="text-xs text-gray-500">2024/01/01 00:00</p>
-          </VStack>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="rounded-lg border border-gray-300 shadow-none">
-                MACHタンク <ChevronDown className="text-gray-500" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white">
-              <DropdownMenuItem>MACHタンク</DropdownMenuItem>
-              <DropdownMenuItem>ヒーター1</DropdownMenuItem>
-              <DropdownMenuItem>廃油タンク</DropdownMenuItem>
-              <DropdownMenuItem>恒温槽</DropdownMenuItem>
-              <DropdownMenuItem>分離塔</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </HStack>
-        <Chart />
-        <Analysis />
+    <HStack className="w-full space-x-6 px-8">
+      <VStack className="w-full items-center overflow-auto space-y-6">
+        <Card className="w-full">
+          <CardHeader className="w-full">
+            <HStack className="w-full items-center justify-between">
+              <CardTitle>MEOHタンク</CardTitle>
+              <SensorSwitcher />
+            </HStack>
+          </CardHeader>
+          <CardContent className="py-4">
+            <Chart />
+          </CardContent>
+        </Card>
+        <Card className="w-full">
+          <CardContent className="py-8">
+            <Analytics />
+          </CardContent>
+        </Card>
       </VStack>
-    </Center>
+      <Card className="w-[400px]">
+        <CardContent className="py-4">
+          <ChartToolbar />
+        </CardContent>
+      </Card>
+    </HStack>
   );
 };
 

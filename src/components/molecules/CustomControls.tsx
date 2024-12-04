@@ -10,14 +10,14 @@ const CustomControls = () => {
   const { zoomIn, zoomOut, fitView } = useReactFlow();
 
   return (
-    <VStack className="absolute bottom-5 left-5 z-controls rounded-md bg-white shadow-md">
-      <Center className="size-7 cursor-pointer hover:bg-gray-100  active:bg-gray-200">
+    <VStack className="absolute bottom-5 left-5 z-controls rounded-md bg-white shadow-md dark:bg-neutral-800">
+      <Center className="size-7 cursor-pointer">
         <Plus className="size-4" onClick={() => zoomIn()} />
       </Center>
-      <Center className="size-7 cursor-pointer hover:bg-gray-100 active:bg-gray-200">
+      <Center className="size-7 cursor-pointer">
         <Minus className="size-4" onClick={() => zoomOut()} />
       </Center>
-      <Center className="size-7 cursor-pointer hover:bg-gray-100 active:bg-gray-200">
+      <Center className="size-7 cursor-pointer">
         <Maximize className="size-4" onClick={() => fitView()} />
       </Center>
     </VStack>

@@ -17,9 +17,13 @@ body {
   font-family: var(--font-inter), var(--font-noto-sans-jp), sans-ser;
 }
 
+.react-flow__attribution {
+  display: none;
+}
+
 @layer base {
   body {
-    @apply text-[#151d48] font-medium;
+    @apply text-[#151d48] dark:text-white font-medium;
   }
 }
 
@@ -30,5 +34,11 @@ body {
   }
   .hidden-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+  .btn-brand {
+    @apply bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white;
+  }
+  .btn-transparent {
+    @apply hover:bg-gray-100 dark:hover:bg-zinc-800;
   }
 }

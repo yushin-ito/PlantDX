@@ -2,7 +2,8 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP, Inter } from "next/font/google";
 import { ReactNode } from "react";
-import { Toaster } from "react-hot-toast";
+
+import { ThemeProvider, ToastProvider } from "./providers";
 
 const inter = Inter({
   weight: ["500", "600", "700"],
@@ -32,17 +33,24 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-const RootLayout = async ({ children }: RootLayoutProps) => {
-  return (
-    <html lang="ja">
-      <body
-        className={`${[inter, noto_sans_jp].map((f) => f.variable).join(" ")}`}
-      >
-        <Toaster />
-        <main className="h-full w-screen">{children}</main>
-      </body>
-    </html>
-  );
-};
+const RootLayout = async ({ children }: RootLayoutProps) => (
+  <html lang="ja" suppressHydrationWarning>
+    <body
+      className={`${[inter, noto_sans_jp].map((f) => f.variable).join(" ")}`}
+    >
+      <ToastProvider />
+      <main className="h-full w-screen">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </main>
+    </body>
+  </html>
+);
 
 export default RootLayout;
