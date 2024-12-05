@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
-import HStack from "@/components/atoms/HStack";
-import NavBar from "@/components/organisms/NavBar";
-import VStack from "@/components/atoms/VStack";
-import Header from "@/components/organisms/Header";
+import { HStack } from "@/components/ui/hstack";
+import { VStack } from "@/components/ui/vstack";
+import Navbar from "@/components/layouts/Navbar";
+import Header from "@/components/layouts/Header";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -12,7 +12,7 @@ type DashboardLayoutProps = {
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <HStack className="size-full">
-      <NavBar />
+      <Navbar />
       <VStack className="flex-1 overflow-auto">
         <Header />
         {children}

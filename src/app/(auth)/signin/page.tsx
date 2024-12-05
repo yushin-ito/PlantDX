@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { createServerClient } from "@/functions/client";
-import SignIn from "@/components/templates/SignIn";
+import SignIn from "@/components/pages/SignIn";
 
 const SignInPage = async () => {
   const supabase = await createServerClient();

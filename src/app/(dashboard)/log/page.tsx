@@ -1,4 +1,4 @@
-import Log from "@/components/templates/Log";
+import Log from "@/components/pages/Log";
 
 const LogPage = () => {
   return <Log />;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cva } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
 import { CheckIcon, ChevronDown, X } from "lucide-react";
 
 import { cn } from "@/functions/tools";
@@ -19,16 +19,16 @@ const multiSelectVariants = cva("mx-1 rounded-full", {
   },
 });
 
-interface MultiSelectProps {
-  children: React.ReactNode;
+type MultiSelectProps = React.ComponentPropsWithoutRef<typeof Popover> & {
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
-}
+};
 
-export const MultiSelect = ({
+const MultiSelect = ({
   children,
   defaultValue = [],
   onValueChange,
+  ...props
 }: MultiSelectProps) => {
   const [selected, setSelected] = React.useState<string[]>(defaultValue);
   const [labels, setLabels] = React.useState<Record<string, string>>({});
@@ -54,45 +54,50 @@ export const MultiSelect = ({
         setIsPopoverOpen,
       }}
     >
-      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} {...props}>
         {children}
       </Popover>
     </MultiSelectContext.Provider>
   );
 };
+MultiSelect.displayName = "MultiSelect";
 
-const MultiSelectContext = React.createContext<{
+type MultiSelectContextProps = {
   labels: Record<string, string>;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
   toggleOption: (value: string, label: string) => void;
   isPopoverOpen: boolean;
   setIsPopoverOpen: (value: boolean) => void;
-} | null>(null);
+};
 
-const useMultiSelectContext = () => {
+const MultiSelectContext = React.createContext<MultiSelectContextProps | null>(
+  null
+);
+
+const useMultiSelect = () => {
   const context = React.useContext(MultiSelectContext);
+
   if (!context) {
-    throw new Error("MultiSelect components must be used within a MultiSelect");
+    throw new Error("useMultiSelect must be used within a MultiSelect");
   }
+
   return context;
 };
 
-interface MultiSelectTriggerProps extends React.HTMLAttributes<HTMLDivElement> {
-  placeholder?: string;
-  className?: string;
-}
-
-export const MultiSelectTrigger = ({
-  placeholder = "",
-  className,
-  ...props
-}: MultiSelectTriggerProps) => {
-  const { labels, selected, setSelected } = useMultiSelectContext();
+const MultiSelectTrigger = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div"> &
+    VariantProps<typeof multiSelectVariants> & {
+      placeholder: string;
+    }
+>(({ className, placeholder, ...props }, ref) => {
+  const { labels, selected, setSelected } = useMultiSelect();
 
   return (
     <PopoverTrigger asChild>
       <div
+        ref={ref}
         className={cn(
           "flex w-full items-center justify-between whitespace-nowrap rounded-md border-[1.5px] border-neutral-200 dark:border-neutral-600 bg-transparent px-1 py-2 text-sm shadow-sm disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 data-[state=open]:!border-brand-600",
           className
@@ -102,10 +107,7 @@ export const MultiSelectTrigger = ({
         {selected.length > 0 ? (
           <div className="flex flex-wrap items-center">
             {selected.map((value, index) => (
-              <Badge
-                key={index}
-                className={multiSelectVariants({ variant: "default" })}
-              >
+              <Badge key={index} className={multiSelectVariants()}>
                 {labels[value]}
                 <X
                   className="ml-2 size-3 cursor-pointer"
@@ -126,47 +128,53 @@ export const MultiSelectTrigger = ({
       </div>
     </PopoverTrigger>
   );
-};
+});
+MultiSelectTrigger.displayName = "MultiSelectTrigger";
 
-type MultiSelectContentProps = React.ComponentPropsWithoutRef<
-  typeof PopoverContent
->;
+const MultiSelectContent = React.forwardRef<
+  React.ElementRef<typeof PopoverContent>,
+  React.ComponentPropsWithoutRef<typeof PopoverContent>
+>(({ className, ...props }, ref) => (
+  <PopoverContent
+    ref={ref}
+    className={cn(
+      "max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0",
+      className
+    )}
+    {...props}
+  >
+    <Command>
+      <CommandList>{props.children}</CommandList>
+    </Command>
+  </PopoverContent>
+));
+MultiSelectContent.displayName = PopoverContent.displayName;
 
-export const MultiSelectContent = ({
-  className,
-  ...props
-}: MultiSelectContentProps) => {
-  return (
-    <PopoverContent
-      className={cn(
-        "max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0",
-        className
-      )}
-      {...props}
-    >
-      <Command>
-        <CommandList>{props.children}</CommandList>
-      </Command>
-    </PopoverContent>
-  );
-};
-
-interface MultiSelectItemProps {
-  value: string;
-  label: string;
-}
-
-export const MultiSelectItem = ({ value, label }: MultiSelectItemProps) => {
-  const { selected, toggleOption } = useMultiSelectContext();
+const MultiSelectItem = React.forwardRef<
+  React.ElementRef<typeof CommandItem>,
+  React.ComponentPropsWithoutRef<typeof CommandItem> & {
+    value: string;
+    label: string;
+  }
+>(({ value, label, className, ...props }, ref) => {
+  const { selected, toggleOption } = useMultiSelect();
   const isSelected = selected.includes(value);
 
   return (
     <CommandItem
+      ref={ref}
       onSelect={() => toggleOption(value, label)}
-      className="flex cursor-pointer items-center justify-between"
+      className={cn(
+        "flex cursor-pointer items-center justify-between",
+        className
+      )}
+      {...props}
     >
       <span>{label}</span>
       {isSelected && <CheckIcon className="size-4" />}
     </CommandItem>
   );
-};
+});
+MultiSelectItem.displayName = CommandItem.displayName;
+
+export { MultiSelect, MultiSelectTrigger, MultiSelectContent, MultiSelectItem };

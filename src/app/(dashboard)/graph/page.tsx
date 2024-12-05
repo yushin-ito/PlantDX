@@ -1,4 +1,4 @@
-import Graph from "@/components/templates/Graph";
+import Graph from "@/components/pages/Graph";
 
 const GraphPage = () => {
   return <Graph />;
