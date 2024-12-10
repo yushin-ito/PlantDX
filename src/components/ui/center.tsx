@@ -8,7 +8,7 @@ export const Center = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center justify-center", className)}
+    className={cn("flex flex-col items-center justify-center", className)}
     {...props}
   />
 ));

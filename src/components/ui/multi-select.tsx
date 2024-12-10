@@ -11,7 +11,7 @@ const multiSelectVariants = cva("mx-1 rounded-full", {
   variants: {
     variant: {
       default:
-        "bg-white text-neutral-950 shadow-sm hover:bg-neutral-100 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700",
+        "border border-neutral-200 bg-white text-neutral-950 shadow-sm hover:bg-neutral-100 dark:border-none dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700",
     },
   },
   defaultVariants: {
@@ -92,7 +92,7 @@ const MultiSelectTrigger = React.forwardRef<
       placeholder: string;
     }
 >(({ className, placeholder, ...props }, ref) => {
-  const { labels, selected, setSelected } = useMultiSelect();
+  const { labels, selected, toggleOption } = useMultiSelect();
 
   return (
     <PopoverTrigger asChild>
@@ -113,7 +113,7 @@ const MultiSelectTrigger = React.forwardRef<
                   className="ml-2 size-3 cursor-pointer"
                   onClick={(event) => {
                     event.stopPropagation();
-                    setSelected((prev) => prev.filter((v) => v !== value));
+                    toggleOption(value, labels[value]);
                   }}
                 />
               </Badge>

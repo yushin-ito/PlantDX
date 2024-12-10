@@ -1,14 +1,13 @@
 import { redirect } from "next/navigation";
 
-import { createServerClient } from "@/functions/client";
-import SignUp from "@/components/pages/SignUp";
+import { getAuth } from "@/actions/auth";
+import SignUp from "@/components/singup/sign-up";
 
 const SignUpPage = async () => {
-  const supabase = await createServerClient();
-  const { data } = await supabase.auth.getUser();
+  const { data } = await getAuth();
 
-  if (data?.user) {
-    redirect("/home");
+  if (data) {
+    redirect("/");
   }
 
   return <SignUp />;

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "schema": "supabase gen types typescript --linked > ./src/types/schema.d.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -17,12 +18,14 @@
     "@radix-ui/react-dropdown-menu": "^2.1.2",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
+    "@radix-ui/react-scroll-area": "^1.2.1",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
+    "@supabase-cache-helpers/postgrest-swr": "^1.10.5",
     "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.46.1",
+    "@supabase/supabase-js": "^2.47.2",
     "@tanstack/react-table": "^8.20.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -37,6 +40,7 @@
     "react-hot-toast": "^2.4.1",
     "reactflow": "^11.11.4",
     "recharts": "^2.13.3",
+    "swr": "^2.2.5",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
@@ -51,6 +55,7 @@
     "eslint-plugin-tailwindcss": "^3.17.5",
     "eslint-plugin-unused-imports": "^4.1.4",
     "postcss": "^8",
+    "supabase": "^2.0.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
