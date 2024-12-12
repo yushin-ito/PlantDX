@@ -85,7 +85,7 @@ const Header = memo(({ userId, plantId }: HeaderProps) => {
 
   return (
     <header className="w-full">
-      <HStack className="items-center justify-between px-8 pb-2 pt-5">
+      <HStack className="items-center justify-between px-8 pb-2 pt-4">
         <h2 className="text-xl font-bold">
           {routes[basename as DashboardRoute]}
         </h2>

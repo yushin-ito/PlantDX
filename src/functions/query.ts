@@ -32,6 +32,18 @@ export const getEdges = <Column extends keyof Node["Row"]>(
   value: Node["Row"][Column]
 ) => supabase.from("edge").select().eq(column, value).throwOnError();
 
+export const getSensors = <Column extends keyof Node["Row"]>(
+  supabase: SupabaseClient<Database>,
+  column: Column,
+  value: Node["Row"][Column]
+) => supabase.from("sensor").select().eq(column, value).throwOnError();
+
+export const getMeasures = <Column extends keyof Node["Row"]>(
+  supabase: SupabaseClient<Database>,
+  column: Column,
+  value: Node["Row"][Column]
+) => supabase.from("measure").select().eq(column, value).throwOnError();
+
 export const getActions = <Column extends keyof Node["Row"]>(
   supabase: SupabaseClient<Database>,
   column: Column,

@@ -101,3 +101,29 @@ export const UpdatePlantSchema = z.object({
     .length(8, { message: "8文字で入力してください" })
     .regex(/^\d+$/, { message: "数字のみで入力してください" }),
 });
+
+export const UpdateNodeSchema = z
+  .object({
+    name: z.string().min(1, { message: "ノード名を入力してください" }),
+    type: z
+      .enum(SENSOR_TYPE)
+      .array()
+      .min(1, { message: "少なくとも1つのセンサーを選択してください" }),
+    command: z.object({
+      temperature: z.string().optional(),
+      humidity: z.string().optional(),
+      pressure: z.string().optional(),
+      volume: z.string().optional(),
+    }),
+  })
+  .superRefine((data, ctx) => {
+    data.type.forEach((type) => {
+      if (!data.command[type]) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["command", type],
+          message: "コマンドを入力してください",
+        });
+      }
+    });
+  });

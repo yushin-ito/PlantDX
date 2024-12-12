@@ -1,5 +1,3 @@
-"use client";
-
 import { memo } from "react";
 import { Handle, Position } from "reactflow";
 
@@ -13,10 +11,10 @@ type CustomNodeProps = {
   data: {
     name: string;
     value: {
-      temperature?: number;
-      humidity?: number;
-      pressure?: number;
-      volume?: number;
+      temperature: number;
+      humidity: number;
+      pressure: number;
+      volume: number;
     };
     type: SensorType[];
   };

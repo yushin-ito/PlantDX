@@ -23,8 +23,9 @@ const config: Config = {
         },
       },
       zIndex: {
-        controls: "1000",
-        fab: "1000",
+        toolbar: "10",
+        controls: "10",
+        fab: "10",
       },
     },
   },

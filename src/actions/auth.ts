@@ -39,7 +39,7 @@ export const signUp = async (email: string, password: string) => {
   }
 };
 
-export const logIn = async (email: string, password: string) => {
+export const signIn = async (email: string, password: string) => {
   try {
     const supabase = await createServerClient();
 

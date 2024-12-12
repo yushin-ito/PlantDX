@@ -19,6 +19,7 @@ import CustomConnectionLine from "./custom-connection-line";
 import CustomControls from "./custom-controls";
 import { CreateNodeSchema } from "@/schemas";
 import CreateNodeModal from "./create-node.modal";
+import RequestToolbar from "./request-toolbar";
 
 import "reactflow/dist/style.css";
 
@@ -26,8 +27,10 @@ type FlowPresenterProps = {
   reactFlowWrapper: RefObject<HTMLDivElement>;
   isOpenModal: boolean;
   setIsOpenModal: Dispatch<SetStateAction<boolean>>;
-  readOnly: boolean;
-  setReadOnly: Dispatch<SetStateAction<boolean>>;
+  isReadOnly: boolean;
+  setIsReadOnly: Dispatch<SetStateAction<boolean>>;
+  isListening: boolean;
+  setIsListening: Dispatch<SetStateAction<boolean>>;
   nodes: Node[];
   edges: Edge[];
   nodeTypes: NodeTypes;
@@ -39,8 +42,11 @@ type FlowPresenterProps = {
   onReconnect: OnEdgeUpdateFunc;
   onReconnectEnd: (event: MouseEvent | TouchEvent, edge: Edge) => void;
   onNodeDragStop: NodeDragHandler;
-  createNodeHandler: (values: z.infer<typeof CreateNodeSchema>) => Promise<void>;
+  createNodeHandler: (
+    values: z.infer<typeof CreateNodeSchema>
+  ) => Promise<void>;
   isLoadingCreateNode: boolean;
+  createActionHandler: () => Promise<void>;
 };
 
 const FlowPresenter = memo(
@@ -48,8 +54,10 @@ const FlowPresenter = memo(
     reactFlowWrapper,
     isOpenModal,
     setIsOpenModal,
-    readOnly,
-    setReadOnly,
+    isReadOnly,
+    setIsReadOnly,
+    isListening,
+    setIsListening,
     nodes,
     edges,
     nodeTypes,
@@ -63,11 +71,13 @@ const FlowPresenter = memo(
     onNodeDragStop,
     createNodeHandler,
     isLoadingCreateNode,
+    createActionHandler,
   }: FlowPresenterProps) => (
     <div ref={reactFlowWrapper} className="size-full">
       <ReactFlow
         fitView
-        nodesConnectable={!readOnly}
+        fitViewOptions={{ padding: 1 }}
+        nodesConnectable={!isReadOnly}
         nodeOrigin={[0.5, 0.5]}
         nodes={nodes}
         edges={edges}
@@ -82,7 +92,12 @@ const FlowPresenter = memo(
         onNodeDragStop={onNodeDragStop}
         connectionLineComponent={CustomConnectionLine}
       >
-        <CustomControls readOnly={readOnly} setReadOnly={setReadOnly} />
+        <CustomControls isReadOnly={isReadOnly} setIsReadOnly={setIsReadOnly} />
+        <RequestToolbar
+          isListening={isListening}
+          setIsListening={setIsListening}
+          createActionHandler={createActionHandler}
+        />
       </ReactFlow>
       <Button
         variant="brand"

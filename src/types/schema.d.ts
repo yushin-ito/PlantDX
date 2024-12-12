@@ -38,40 +38,64 @@ export type Database = {
         Row: {
           actionId: number
           command: string
+          controlId: number | null
+          count: number | null
           createdAt: string
+          deviceId: string
           plantId: number
-          status: string
-          title: string
-          type: string
+          sensorId: number | null
           updatedAt: string
         }
         Insert: {
           actionId?: number
           command: string
+          controlId?: number | null
+          count?: number | null
           createdAt?: string
+          deviceId: string
           plantId: number
-          status: string
-          title: string
-          type: string
+          sensorId?: number | null
           updatedAt?: string
         }
         Update: {
           actionId?: number
           command?: string
+          controlId?: number | null
+          count?: number | null
           createdAt?: string
+          deviceId?: string
           plantId?: number
-          status?: string
-          title?: string
-          type?: string
+          sensorId?: number | null
           updatedAt?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "action_controlId_fkey"
+            columns: ["controlId"]
+            isOneToOne: false
+            referencedRelation: "control"
+            referencedColumns: ["controlId"]
+          },
+          {
+            foreignKeyName: "action_deviceId_fkey"
+            columns: ["deviceId"]
+            isOneToOne: false
+            referencedRelation: "device"
+            referencedColumns: ["deviceId"]
+          },
           {
             foreignKeyName: "action_plantId_fkey"
             columns: ["plantId"]
             isOneToOne: false
             referencedRelation: "plant"
             referencedColumns: ["plantId"]
+          },
+          {
+            foreignKeyName: "action_sensorId_fkey"
+            columns: ["sensorId"]
+            isOneToOne: false
+            referencedRelation: "sensor"
+            referencedColumns: ["sensorId"]
           },
         ]
       }
@@ -121,16 +145,19 @@ export type Database = {
       }
       device: {
         Row: {
+          active: boolean
           createdAt: string
           deviceId: string
           updatedAt: string
         }
         Insert: {
+          active?: boolean
           createdAt?: string
           deviceId: string
           updatedAt?: string
         }
         Update: {
+          active?: boolean
           createdAt?: string
           deviceId?: string
           updatedAt?: string
@@ -189,6 +216,48 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "node"
             referencedColumns: ["nodeId"]
+          },
+        ]
+      }
+      measure: {
+        Row: {
+          count: number
+          createdAt: string
+          measureId: number
+          plantId: number
+          sensorId: number
+          value: number
+        }
+        Insert: {
+          count: number
+          createdAt?: string
+          measureId?: number
+          plantId: number
+          sensorId: number
+          value: number
+        }
+        Update: {
+          count?: number
+          createdAt?: string
+          measureId?: number
+          plantId?: number
+          sensorId?: number
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_plantId_fkey"
+            columns: ["plantId"]
+            isOneToOne: false
+            referencedRelation: "plant"
+            referencedColumns: ["plantId"]
+          },
+          {
+            foreignKeyName: "data_sensorId_fkey"
+            columns: ["sensorId"]
+            isOneToOne: false
+            referencedRelation: "sensor"
+            referencedColumns: ["sensorId"]
           },
         ]
       }
@@ -277,6 +346,7 @@ export type Database = {
       }
       plant: {
         Row: {
+          count: number
           createdAt: string
           deviceId: string
           name: string
@@ -284,6 +354,7 @@ export type Database = {
           updatedAt: string
         }
         Insert: {
+          count?: number
           createdAt?: string
           deviceId: string
           name: string
@@ -291,6 +362,7 @@ export type Database = {
           updatedAt?: string
         }
         Update: {
+          count?: number
           createdAt?: string
           deviceId?: string
           name?: string
@@ -311,37 +383,37 @@ export type Database = {
         Row: {
           command: string
           createdAt: string
-          deviceId: string
-          nodeId: number
+          nodeId: number | null
+          plantId: number
           sensorId: number
+          type: string
           updatedAt: string
-          value: number | null
         }
         Insert: {
           command: string
           createdAt?: string
-          deviceId: string
-          nodeId: number
+          nodeId?: number | null
+          plantId: number
           sensorId?: number
+          type: string
           updatedAt?: string
-          value?: number | null
         }
         Update: {
           command?: string
           createdAt?: string
-          deviceId?: string
-          nodeId?: number
+          nodeId?: number | null
+          plantId?: number
           sensorId?: number
+          type?: string
           updatedAt?: string
-          value?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "sensor_deviceId_fkey"
-            columns: ["deviceId"]
+            foreignKeyName: "sensor_plantId_fkey1"
+            columns: ["plantId"]
             isOneToOne: false
-            referencedRelation: "device"
-            referencedColumns: ["deviceId"]
+            referencedRelation: "plant"
+            referencedColumns: ["plantId"]
           },
           {
             foreignKeyName: "sensorId_nodeId_fkey"

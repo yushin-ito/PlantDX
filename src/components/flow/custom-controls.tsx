@@ -8,12 +8,12 @@ import { Center } from "../ui/center";
 import { VStack } from "../ui/vstack";
 
 type CustomControlsProps = {
-  readOnly: boolean;
-  setReadOnly: Dispatch<SetStateAction<boolean>>;
+  isReadOnly: boolean;
+  setIsReadOnly: Dispatch<SetStateAction<boolean>>;
 };
 
 const CustomControls = memo(
-  ({ readOnly, setReadOnly }: CustomControlsProps) => {
+  ({ isReadOnly, setIsReadOnly }: CustomControlsProps) => {
     const { zoomIn, zoomOut, fitView } = useReactFlow();
 
     return (
@@ -28,10 +28,13 @@ const CustomControls = memo(
           <Maximize className="size-4" onClick={() => fitView()} />
         </Center>
         <Center className="size-7 cursor-pointer">
-          {readOnly ? (
-            <Pencil className="size-3.5" onClick={() => setReadOnly(false)} />
+          {isReadOnly ? (
+            <Pencil className="size-3.5" onClick={() => setIsReadOnly(false)} />
           ) : (
-            <PencilOff className="size-3.5" onClick={() => setReadOnly(true)} />
+            <PencilOff
+              className="size-3.5"
+              onClick={() => setIsReadOnly(true)}
+            />
           )}
         </Center>
       </VStack>

@@ -24,7 +24,7 @@ import { Center } from "../ui/center";
 import { HStack } from "../ui/hstack";
 import { VStack } from "../ui/vstack";
 import { Card, CardContent } from "../ui/card";
-import { logIn } from "@/actions/auth";
+import { signIn } from "@/actions/auth";
 
 const LogIn = () => {
   const router = useRouter();
@@ -45,7 +45,7 @@ const LogIn = () => {
 
     startTransition(async () => {
       try {
-        const { data, error } = await logIn(values.email, values.password);
+        const { data, error } = await signIn(values.email, values.password);
 
         if (error) {
           setError("エラーが発生しました。");

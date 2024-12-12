@@ -31,7 +31,7 @@ import {
   MultiSelectItem,
   MultiSelectTrigger,
 } from "../ui/multi-select";
-import { CreateNodeSchema } from "@/schemas";
+import { UpdateNodeSchema } from "@/schemas";
 import { HStack } from "../ui/hstack";
 import { VStack } from "../ui/vstack";
 import { SensorType } from "@/types";
@@ -43,27 +43,27 @@ const labels: Record<SensorType, string> = {
   volume: "容量",
 };
 
-type CreateNodeModalProps = {
+type UpdateNodeModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  createNodeHandler: (
-    values: z.infer<typeof CreateNodeSchema>
+  UpdateNodeHandler: (
+    values: z.infer<typeof UpdateNodeSchema>
   ) => Promise<void>;
-  isLoadingCreateNode: boolean;
+  isLoadingUpdateNode: boolean;
 };
 
-const CreateNodeModal = memo(
+const UpdateNodeModal = memo(
   ({
     isOpen,
     setIsOpen,
-    createNodeHandler,
-    isLoadingCreateNode,
-  }: CreateNodeModalProps) => {
+    UpdateNodeHandler,
+    isLoadingUpdateNode,
+  }: UpdateNodeModalProps) => {
     const [error, setError] = useState("");
     const [selected, setSelected] = useState<string[]>([]);
 
-    const form = useForm<z.infer<typeof CreateNodeSchema>>({
-      resolver: zodResolver(CreateNodeSchema),
+    const form = useForm<z.infer<typeof UpdateNodeSchema>>({
+      resolver: zodResolver(UpdateNodeSchema),
       defaultValues: {
         name: "",
         type: [],
@@ -76,11 +76,11 @@ const CreateNodeModal = memo(
       },
     });
 
-    const onSubmit = async (values: z.infer<typeof CreateNodeSchema>) => {
+    const onSubmit = async (values: z.infer<typeof UpdateNodeSchema>) => {
       setError("");
 
       try {
-        await createNodeHandler(values);
+        await UpdateNodeHandler(values);
 
         toast.success("ノードを作成しました");
         setIsOpen(false);
@@ -203,10 +203,10 @@ const CreateNodeModal = memo(
                         キャンセル
                       </Button>
                       <Button type="submit" variant="brand">
-                        {isLoadingCreateNode && (
+                        {isLoadingUpdateNode && (
                           <Loader2 className="size-5 animate-spin" />
                         )}
-                        <span>作成する</span>
+                        <span>更新する</span>
                       </Button>
                     </HStack>
                   </DialogFooter>
@@ -220,4 +220,4 @@ const CreateNodeModal = memo(
   }
 );
 
-export default CreateNodeModal;
+export default UpdateNodeModal;
