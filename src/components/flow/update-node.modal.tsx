@@ -46,7 +46,7 @@ const labels: Record<SensorType, string> = {
 type UpdateNodeModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  UpdateNodeHandler: (
+  updateNodeHandler: (
     values: z.infer<typeof UpdateNodeSchema>
   ) => Promise<void>;
   isLoadingUpdateNode: boolean;
@@ -56,7 +56,7 @@ const UpdateNodeModal = memo(
   ({
     isOpen,
     setIsOpen,
-    UpdateNodeHandler,
+    updateNodeHandler,
     isLoadingUpdateNode,
   }: UpdateNodeModalProps) => {
     const [error, setError] = useState("");
@@ -80,7 +80,7 @@ const UpdateNodeModal = memo(
       setError("");
 
       try {
-        await UpdateNodeHandler(values);
+        await updateNodeHandler(values);
 
         toast.success("ノードを作成しました");
         setIsOpen(false);

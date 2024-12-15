@@ -29,6 +29,7 @@ export type Device = Database["public"]["Tables"]["device"];
 export type Edge = Database["public"]["Tables"]["edge"];
 export type Action = Database["public"]["Tables"]["action"];
 export type Member = Database["public"]["Tables"]["member"];
+export type Measure = Database["public"]["Tables"]["measure"];
 export type Node = Database["public"]["Tables"]["node"];
 export type Plant = Database["public"]["Tables"]["plant"];
 export type Sensor = Database["public"]["Tables"]["sensor"];

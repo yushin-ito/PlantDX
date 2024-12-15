@@ -10,6 +10,7 @@ import {
   OnEdgeUpdateFunc,
   Edge,
   NodeDragHandler,
+  NodeProps,
 } from "reactflow";
 import {
   useDeleteMutation,
@@ -32,7 +33,7 @@ import { createBrowserClient } from "@/functions/browser";
 import FlowPresenter from "./flow.presenter";
 import CustomEdge from "./custom-edge";
 import CustomNode from "./custom-node";
-import { CreateNodeSchema } from "@/schemas";
+import { CreateNodeSchema, UpdateNodeSchema } from "@/schemas";
 
 type FlowContainerProps = {
   plantId: number;
@@ -42,9 +43,11 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const edgeReconnectSuccessful = useRef(true);
 
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenCreateNodeModal, setIsOpenCreateNodeModal] = useState(false);
+  const [isOpenUpdateNodeModal, setIsOpenUpdateNodeModal] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -72,7 +75,21 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
     "*"
   );
 
-  const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
+  const nodeTypes = useMemo(
+    () => ({
+      custom: ({ ...props }: NodeProps) => (
+        <CustomNode
+          isReadOnly={isReadOnly}
+          onEdit={() => {
+            setIsOpenUpdateNodeModal(true);
+            setSelectedId(Number(props.id.replace("node", "")));
+          }}
+          {...props}
+        />
+      ),
+    }),
+    [isReadOnly]
+  );
   const edgeTypes = useMemo(() => ({ custom: CustomEdge }), []);
 
   const { trigger: insertNode, isMutating: isLoadingInsertNode } =
@@ -87,12 +104,10 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
     { throwOnError: true }
   );
 
-  const { trigger: updateNode } = useUpdateMutation(
-    supabase.from("node"),
-    ["nodeId"],
-    "*",
-    { throwOnError: true }
-  );
+  const { trigger: updateNode, isMutating: isLoadingUpdateNode } =
+    useUpdateMutation(supabase.from("node"), ["nodeId"], "*", {
+      throwOnError: true,
+    });
 
   const { trigger: insertEdge } = useInsertMutation(
     supabase.from("edge"),
@@ -202,6 +217,51 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
     measures.data,
     setNodes,
     setEdges,
+  ]);
+
+  useEffect(() => {
+    if (isListening) {
+      const interval = setInterval(async () => {
+        if (savedNodes.data && savedNodes.data.length > 0) {
+          await Promise.all(
+            savedNodes.data.map(async () => {
+              if (sensors.data && sensors.data.length > 0) {
+                sensors.data.map(async (sensor) => {
+                  if (plant.data) {
+                    await insertAction([
+                      {
+                        command: sensor.command,
+                        sensorId: sensor.sensorId,
+                        plantId,
+                        deviceId: plant.data.deviceId,
+                        count: plant.data.count + 1,
+                      },
+                    ]);
+                  }
+                });
+              }
+            })
+          );
+        }
+
+        if (plant.data) {
+          await updatePlant({
+            plantId,
+            count: plant.data.count + 1,
+          });
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [
+    insertAction,
+    isListening,
+    plant.data,
+    plantId,
+    savedNodes.data,
+    sensors.data,
+    updatePlant,
   ]);
 
   const onConnect: OnConnect = useCallback(
@@ -383,11 +443,25 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
     updatePlant,
   ]);
 
+  const updateNodeHnandler = useCallback(
+    async (values: z.infer<typeof UpdateNodeSchema>) => {
+      if (selectedId) {
+        await updateNode({
+          nodeId: selectedId,
+          name: values.name,
+        });
+      }
+    },
+    [selectedId, updateNode]
+  );
+
   return (
     <FlowPresenter
       reactFlowWrapper={reactFlowWrapper}
-      isOpenModal={isOpenModal}
-      setIsOpenModal={setIsOpenModal}
+      isOpenCreateNodeModal={isOpenCreateNodeModal}
+      setIsOpenCreateNodeModal={setIsOpenCreateNodeModal}
+      isOpenUpdateNodeModal={isOpenUpdateNodeModal}
+      setIsOpenUpdateNodeModal={setIsOpenUpdateNodeModal}
       isReadOnly={isReadOnly}
       setIsReadOnly={setIsReadOnly}
       isListening={isListening}
@@ -406,6 +480,8 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
       createNodeHandler={createNodeHandler}
       isLoadingCreateNode={isLoadingInsertNode}
       createActionHandler={createActionHandler}
+      updateNodeHandler={updateNodeHnandler}
+      isLoadingUpdateNode={isLoadingUpdateNode}
     />
   );
 });

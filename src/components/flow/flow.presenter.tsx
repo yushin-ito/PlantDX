@@ -17,16 +17,18 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 import CustomConnectionLine from "./custom-connection-line";
 import CustomControls from "./custom-controls";
-import { CreateNodeSchema } from "@/schemas";
+import { CreateNodeSchema, UpdateNodeSchema } from "@/schemas";
 import CreateNodeModal from "./create-node.modal";
-import RequestToolbar from "./request-toolbar";
+import UpdateNodeModal from "./update-node.modal";
 
 import "reactflow/dist/style.css";
 
 type FlowPresenterProps = {
   reactFlowWrapper: RefObject<HTMLDivElement>;
-  isOpenModal: boolean;
-  setIsOpenModal: Dispatch<SetStateAction<boolean>>;
+  isOpenCreateNodeModal: boolean;
+  setIsOpenCreateNodeModal: Dispatch<SetStateAction<boolean>>;
+  isOpenUpdateNodeModal: boolean;
+  setIsOpenUpdateNodeModal: Dispatch<SetStateAction<boolean>>;
   isReadOnly: boolean;
   setIsReadOnly: Dispatch<SetStateAction<boolean>>;
   isListening: boolean;
@@ -46,14 +48,20 @@ type FlowPresenterProps = {
     values: z.infer<typeof CreateNodeSchema>
   ) => Promise<void>;
   isLoadingCreateNode: boolean;
+  updateNodeHandler: (
+    values: z.infer<typeof UpdateNodeSchema>
+  ) => Promise<void>;
+  isLoadingUpdateNode: boolean;
   createActionHandler: () => Promise<void>;
 };
 
 const FlowPresenter = memo(
   ({
     reactFlowWrapper,
-    isOpenModal,
-    setIsOpenModal,
+    isOpenCreateNodeModal,
+    setIsOpenCreateNodeModal,
+    isOpenUpdateNodeModal,
+    setIsOpenUpdateNodeModal,
     isReadOnly,
     setIsReadOnly,
     isListening,
@@ -71,6 +79,8 @@ const FlowPresenter = memo(
     onNodeDragStop,
     createNodeHandler,
     isLoadingCreateNode,
+    updateNodeHandler,
+    isLoadingUpdateNode,
     createActionHandler,
   }: FlowPresenterProps) => (
     <div ref={reactFlowWrapper} className="size-full">
@@ -92,8 +102,9 @@ const FlowPresenter = memo(
         onNodeDragStop={onNodeDragStop}
         connectionLineComponent={CustomConnectionLine}
       >
-        <CustomControls isReadOnly={isReadOnly} setIsReadOnly={setIsReadOnly} />
-        <RequestToolbar
+        <CustomControls
+          isReadOnly={isReadOnly}
+          setIsReadOnly={setIsReadOnly}
           isListening={isListening}
           setIsListening={setIsListening}
           createActionHandler={createActionHandler}
@@ -102,15 +113,21 @@ const FlowPresenter = memo(
       <Button
         variant="brand"
         className="absolute bottom-8 right-8 z-fab size-12 rounded-full shadow-md"
-        onClick={() => setIsOpenModal(true)}
+        onClick={() => setIsOpenCreateNodeModal(true)}
       >
         <Plus className="size-6" />
       </Button>
       <CreateNodeModal
-        isOpen={isOpenModal}
-        setIsOpen={setIsOpenModal}
+        isOpen={isOpenCreateNodeModal}
+        setIsOpen={setIsOpenCreateNodeModal}
         createNodeHandler={createNodeHandler}
         isLoadingCreateNode={isLoadingCreateNode}
+      />
+      <UpdateNodeModal
+        isOpen={isOpenUpdateNodeModal}
+        setIsOpen={setIsOpenUpdateNodeModal}
+        updateNodeHandler={updateNodeHandler}
+        isLoadingUpdateNode={isLoadingUpdateNode}
       />
     </div>
   )
