@@ -219,48 +219,6 @@ export type Database = {
           },
         ]
       }
-      measure: {
-        Row: {
-          count: number
-          createdAt: string
-          measureId: number
-          plantId: number
-          sensorId: number
-          value: number
-        }
-        Insert: {
-          count: number
-          createdAt?: string
-          measureId?: number
-          plantId: number
-          sensorId: number
-          value: number
-        }
-        Update: {
-          count?: number
-          createdAt?: string
-          measureId?: number
-          plantId?: number
-          sensorId?: number
-          value?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "data_plantId_fkey"
-            columns: ["plantId"]
-            isOneToOne: false
-            referencedRelation: "plant"
-            referencedColumns: ["plantId"]
-          },
-          {
-            foreignKeyName: "data_sensorId_fkey"
-            columns: ["sensorId"]
-            isOneToOne: false
-            referencedRelation: "sensor"
-            referencedColumns: ["sensorId"]
-          },
-        ]
-      }
       member: {
         Row: {
           createdAt: string
@@ -379,33 +337,72 @@ export type Database = {
           },
         ]
       }
+      record: {
+        Row: {
+          createdAt: string
+          plantId: number
+          recordId: number
+          sensorId: number
+          value: number
+        }
+        Insert: {
+          createdAt?: string
+          plantId: number
+          recordId?: number
+          sensorId: number
+          value: number
+        }
+        Update: {
+          createdAt?: string
+          plantId?: number
+          recordId?: number
+          sensorId?: number
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_plantId_fkey"
+            columns: ["plantId"]
+            isOneToOne: false
+            referencedRelation: "plant"
+            referencedColumns: ["plantId"]
+          },
+          {
+            foreignKeyName: "data_sensorId_fkey"
+            columns: ["sensorId"]
+            isOneToOne: false
+            referencedRelation: "sensor"
+            referencedColumns: ["sensorId"]
+          },
+        ]
+      }
       sensor: {
         Row: {
-          command: string
           createdAt: string
           nodeId: number | null
           plantId: number
           sensorId: number
           type: string
           updatedAt: string
+          value: number | null
         }
         Insert: {
-          command: string
           createdAt?: string
           nodeId?: number | null
           plantId: number
           sensorId?: number
           type: string
           updatedAt?: string
+          value?: number | null
         }
         Update: {
-          command?: string
           createdAt?: string
           nodeId?: number | null
           plantId?: number
           sensorId?: number
           type?: string
           updatedAt?: string
+          value?: number | null
         }
         Relationships: [
           {

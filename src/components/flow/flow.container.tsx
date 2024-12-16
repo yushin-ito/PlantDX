@@ -27,7 +27,7 @@ import {
   getNodes,
   getPlants,
   getSensors,
-  getMeasures,
+  getRecords,
 } from "@/functions/query";
 import { createBrowserClient } from "@/functions/browser";
 import FlowPresenter from "./flow.presenter";
@@ -45,7 +45,6 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
 
   const [isOpenCreateNodeModal, setIsOpenCreateNodeModal] = useState(false);
   const [isOpenUpdateNodeModal, setIsOpenUpdateNodeModal] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -57,8 +56,8 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
 
   const plant = useQuery(getPlants(supabase, "plantId", plantId).single());
   const sensors = useQuery(getSensors(supabase, "plantId", plantId));
-  const measures = useQuery(
-    getMeasures(supabase, "plantId", plantId).eq("count", plant.count || -1)
+  const records = useQuery(
+    getRecords(supabase, "plantId", plantId).eq("count", plant.count || -1)
   );
 
   // センサーデータの監視
@@ -97,13 +96,6 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
       throwOnError: true,
     });
 
-  const { trigger: updatePlant } = useUpdateMutation(
-    supabase.from("plant"),
-    ["plantId"],
-    "*",
-    { throwOnError: true }
-  );
-
   const { trigger: updateNode, isMutating: isLoadingUpdateNode } =
     useUpdateMutation(supabase.from("node"), ["nodeId"], "*", {
       throwOnError: true,
@@ -130,14 +122,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
     { throwOnError: true }
   );
 
-  const { trigger: insertAction } = useInsertMutation(
-    supabase.from("action"),
-    ["actionId"],
-    "*",
-    { throwOnError: true }
-  );
-
-  const { trigger: insertSensor } = useInsertMutation(
+  const { trigger: updateSensor } = useUpdateMutation(
     supabase.from("sensor"),
     ["sensorId"],
     "*",
@@ -151,25 +136,21 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
           ?.filter((sensor) => sensor.nodeId === node.nodeId)
           .reduce(
             (acc, sensor) => {
-              const measure = measures.data?.find(
-                (measure) => measure.sensorId === sensor.sensorId
-              );
-
-              if (measure) {
+              if (sensor.value) {
                 if (sensor.type === "temperature") {
-                  acc.temperature = measure.value;
+                  acc.temperature = sensor.value;
                 }
 
                 if (sensor.type === "humidity") {
-                  acc.humidity = measure.value;
+                  acc.humidity = sensor.value;
                 }
 
                 if (sensor.type === "pressure") {
-                  acc.pressure = measure.value;
+                  acc.pressure = sensor.value;
                 }
 
                 if (sensor.type === "volume") {
-                  acc.volume = measure.value;
+                  acc.volume = sensor.value;
                 }
               }
 
@@ -183,12 +164,14 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
           position: { x: node.x, y: node.y },
           data: {
             name: node.name,
-            value: {
-              temperature: data?.temperature || 0,
-              humidity: data?.humidity || 0,
-              pressure: data?.pressure || 0,
-              volume: data?.volume || 0,
-            },
+            value: data
+              ? {
+                  temperature: data.temperature,
+                  humidity: data.humidity,
+                  pressure: data.pressure,
+                  volume: data.volume,
+                }
+              : { temperature: 0, humidity: 0, pressure: 0, volume: 0 },
             type: node.type,
           },
           type: "custom",
@@ -214,54 +197,9 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
     savedNodes.data,
     savedEdes.data,
     sensors.data,
-    measures.data,
+    records.data,
     setNodes,
     setEdges,
-  ]);
-
-  useEffect(() => {
-    if (isListening) {
-      const interval = setInterval(async () => {
-        if (savedNodes.data && savedNodes.data.length > 0) {
-          await Promise.all(
-            savedNodes.data.map(async () => {
-              if (sensors.data && sensors.data.length > 0) {
-                sensors.data.map(async (sensor) => {
-                  if (plant.data) {
-                    await insertAction([
-                      {
-                        command: sensor.command,
-                        sensorId: sensor.sensorId,
-                        plantId,
-                        deviceId: plant.data.deviceId,
-                        count: plant.data.count + 1,
-                      },
-                    ]);
-                  }
-                });
-              }
-            })
-          );
-        }
-
-        if (plant.data) {
-          await updatePlant({
-            plantId,
-            count: plant.data.count + 1,
-          });
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [
-    insertAction,
-    isListening,
-    plant.data,
-    plantId,
-    savedNodes.data,
-    sensors.data,
-    updatePlant,
   ]);
 
   const onConnect: OnConnect = useCallback(
@@ -383,76 +321,50 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
         },
       ]);
 
-      if (!node || node.length === 0) {
-        return;
-      }
-
-      await Promise.all(
-        values.type.map(async (type) => {
-          if (values.command[type]) {
-            return await insertSensor([
-              {
-                command: values.command[type],
+      if (node && node.length > 0) {
+        await Promise.all(
+          values.type.map(async (type) => {
+            if (values.sensorId[type]) {
+              return await updateSensor({
+                sensorId: Number(values.sensorId[type]),
                 nodeId: node[0].nodeId,
                 type,
                 plantId,
-              },
-            ]);
-          }
-        })
-      );
-    },
-    [getViewport, insertNode, insertSensor, plantId]
-  );
-
-  const createActionHandler = useCallback(async () => {
-    if (savedNodes.data && savedNodes.data.length > 0) {
-      await Promise.all(
-        savedNodes.data.map(async () => {
-          if (sensors.data && sensors.data.length > 0) {
-            sensors.data.map(async (sensor) => {
-              if (plant.data) {
-                await insertAction([
-                  {
-                    command: sensor.command,
-                    sensorId: sensor.sensorId,
-                    plantId,
-                    deviceId: plant.data.deviceId,
-                    count: plant.data.count + 1,
-                  },
-                ]);
-              }
-            });
-          }
-        })
-      );
-    }
-
-    if (plant.data) {
-      await updatePlant({
-        plantId,
-        count: plant.data.count + 1,
-      });
-    }
-  }, [
-    insertAction,
-    plant.data,
-    plantId,
-    savedNodes.data,
-    sensors.data,
-    updatePlant,
-  ]);
-
-  const updateNodeHnandler = useCallback(
-    async (values: z.infer<typeof UpdateNodeSchema>) => {
-      if (selectedId) {
-        await updateNode({
-          nodeId: selectedId,
-          name: values.name,
-        });
+              });
+            }
+          })
+        );
       }
     },
-    [selectedId, updateNode]
+    [getViewport, insertNode, plantId, updateSensor]
+  );
+
+  const updateNodeHandler = useCallback(
+    async (values: z.infer<typeof UpdateNodeSchema>) => {
+      if (selectedId) {
+        const node = await updateNode({
+          nodeId: selectedId,
+          name: values.name,
+          type: values.type,
+        });
+
+        if (node) {
+          await Promise.all(
+            values.type.map(async (type) => {
+              if (values.sensorId[type]) {
+                return await updateSensor({
+                  sensorId: Number(values.sensorId[type]),
+                  nodeId: node.nodeId,
+                  type,
+                  plantId,
+                });
+              }
+            })
+          );
+        }
+      }
+    },
+    [plantId, selectedId, updateNode, updateSensor]
   );
 
   return (
@@ -464,8 +376,6 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
       setIsOpenUpdateNodeModal={setIsOpenUpdateNodeModal}
       isReadOnly={isReadOnly}
       setIsReadOnly={setIsReadOnly}
-      isListening={isListening}
-      setIsListening={setIsListening}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
@@ -479,8 +389,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
       onNodeDragStop={onNodeDragStop}
       createNodeHandler={createNodeHandler}
       isLoadingCreateNode={isLoadingInsertNode}
-      createActionHandler={createActionHandler}
-      updateNodeHandler={updateNodeHnandler}
+      updateNodeHandler={updateNodeHandler}
       isLoadingUpdateNode={isLoadingUpdateNode}
     />
   );

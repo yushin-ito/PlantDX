@@ -35,6 +35,9 @@ import { CreateNodeSchema } from "@/schemas";
 import { HStack } from "../ui/hstack";
 import { VStack } from "../ui/vstack";
 import { SensorType } from "@/types";
+import { createBrowserClient } from "@/functions/browser";
+import { getSensors } from "@/functions/query";
+import { ScrollArea } from "../ui/scroll-area";
 
 const labels: Record<SensorType, string> = {
   temperature: "温度",
@@ -62,12 +65,14 @@ const CreateNodeModal = memo(
     const [error, setError] = useState("");
     const [selected, setSelected] = useState<string[]>([]);
 
+    const supabase = createBrowserClient();
+
     const form = useForm<z.infer<typeof CreateNodeSchema>>({
       resolver: zodResolver(CreateNodeSchema),
       defaultValues: {
         name: "",
         type: [],
-        command: {
+        sensorId: {
           temperature: "",
           humidity: "",
           pressure: "",
@@ -80,6 +85,20 @@ const CreateNodeModal = memo(
       setError("");
 
       try {
+        await Promise.all(
+          values.type.map(async (type) => {
+            const sensorId = Number(values.sensorId[type]);
+            if (sensorId) {
+              const sensors = await getSensors(supabase, "sensorId", sensorId);
+
+              if (!sensors.data || sensors.data.length === 0) {
+                setError(`${labels[type]}センサーが見つかりません。`);
+                return;
+              }
+            }
+          })
+        );
+
         await createNodeHandler(values);
 
         toast.success("ノードを作成しました");
@@ -112,83 +131,88 @@ const CreateNodeModal = memo(
 
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack className="space-y-12 px-2">
-                  <VStack className="hidden-scrollbar h-52 space-y-6 overflow-y-auto">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>センサー名</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                <VStack className="space-y-8">
+                  <ScrollArea className="h-[220px] pl-2 pr-6">
+                    <VStack className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>センサー名</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="type"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>タイプ</FormLabel>
+                            <FormControl>
+                              <MultiSelect
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                  setSelected(value);
+                                }}
+                                {...field}
+                              >
+                                <MultiSelectTrigger placeholder="センサーを選択" />
+                                <MultiSelectContent>
+                                  <MultiSelectItem
+                                    value="temperature"
+                                    label="温度"
+                                  />
+                                  <MultiSelectItem
+                                    value="humidity"
+                                    label="湿度"
+                                  />
+                                  <MultiSelectItem
+                                    value="pressure"
+                                    label="圧力"
+                                  />
+                                  <MultiSelectItem
+                                    value="volume"
+                                    label="容量"
+                                  />
+                                </MultiSelectContent>
+                              </MultiSelect>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {Object.entries(labels).map(
+                        ([key, label]) =>
+                          selected.includes(key) && (
+                            <FormField
+                              key={key}
+                              control={form.control}
+                              name={`sensorId.${key as SensorType}`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>{label}センサー番号</FormLabel>
+                                  <FormControl>
+                                    <Input {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          )
                       )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>タイプ</FormLabel>
-                          <FormControl>
-                            <MultiSelect
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                                setSelected(value);
-                              }}
-                              {...field}
-                            >
-                              <MultiSelectTrigger placeholder="センサーを選択" />
-                              <MultiSelectContent>
-                                <MultiSelectItem
-                                  value="temperature"
-                                  label="温度"
-                                />
-                                <MultiSelectItem
-                                  value="humidity"
-                                  label="湿度"
-                                />
-                                <MultiSelectItem
-                                  value="pressure"
-                                  label="圧力"
-                                />
-                                <MultiSelectItem value="volume" label="容量" />
-                              </MultiSelectContent>
-                            </MultiSelect>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                      {error && (
+                        <HStack className="space-x-1 rounded-md bg-red-100 p-3 text-sm text-red-500 dark:bg-red-500 dark:text-white">
+                          <AlertCircle className="size-5" />
+                          <span>{error}</span>
+                        </HStack>
                       )}
-                    />
-                    {Object.entries(labels).map(
-                      ([key, label]) =>
-                        selected.includes(key) && (
-                          <FormField
-                            key={key}
-                            control={form.control}
-                            name={`command.${key as SensorType}`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>{label}コマンド</FormLabel>
-                                <FormControl>
-                                  <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        )
-                    )}
-                    {error && (
-                      <HStack className="space-x-1 rounded-md bg-red-100 p-3 text-sm text-red-500 dark:bg-red-500 dark:text-white">
-                        <AlertCircle className="size-5" />
-                        <span>{error}</span>
-                      </HStack>
-                    )}
-                  </VStack>
+                    </VStack>
+                  </ScrollArea>
 
                   <DialogFooter>
                     <HStack className="items-center space-x-3">

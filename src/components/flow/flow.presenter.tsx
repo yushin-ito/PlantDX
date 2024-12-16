@@ -31,8 +31,6 @@ type FlowPresenterProps = {
   setIsOpenUpdateNodeModal: Dispatch<SetStateAction<boolean>>;
   isReadOnly: boolean;
   setIsReadOnly: Dispatch<SetStateAction<boolean>>;
-  isListening: boolean;
-  setIsListening: Dispatch<SetStateAction<boolean>>;
   nodes: Node[];
   edges: Edge[];
   nodeTypes: NodeTypes;
@@ -52,7 +50,6 @@ type FlowPresenterProps = {
     values: z.infer<typeof UpdateNodeSchema>
   ) => Promise<void>;
   isLoadingUpdateNode: boolean;
-  createActionHandler: () => Promise<void>;
 };
 
 const FlowPresenter = memo(
@@ -64,8 +61,6 @@ const FlowPresenter = memo(
     setIsOpenUpdateNodeModal,
     isReadOnly,
     setIsReadOnly,
-    isListening,
-    setIsListening,
     nodes,
     edges,
     nodeTypes,
@@ -81,7 +76,6 @@ const FlowPresenter = memo(
     isLoadingCreateNode,
     updateNodeHandler,
     isLoadingUpdateNode,
-    createActionHandler,
   }: FlowPresenterProps) => (
     <div ref={reactFlowWrapper} className="size-full">
       <ReactFlow
@@ -105,9 +99,6 @@ const FlowPresenter = memo(
         <CustomControls
           isReadOnly={isReadOnly}
           setIsReadOnly={setIsReadOnly}
-          isListening={isListening}
-          setIsListening={setIsListening}
-          createActionHandler={createActionHandler}
         />
       </ReactFlow>
       <Button

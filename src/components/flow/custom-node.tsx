@@ -19,7 +19,7 @@ type CustomNodeProps = {
       humidity: number;
       pressure: number;
       volume: number;
-    };
+    }
     type: SensorType[];
   };
   isConnectable: boolean;

@@ -5,7 +5,9 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "@/functions/tools";
 
-const Popover = PopoverPrimitive.Root;
+const Popover = ({ modal = true, ...props }: PopoverPrimitive.PopoverProps) => (
+  <PopoverPrimitive.Root modal={modal} {...props} />
+);
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
 

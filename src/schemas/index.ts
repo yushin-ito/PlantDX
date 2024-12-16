@@ -61,7 +61,7 @@ export const CreateNodeSchema = z
       .enum(SENSOR_TYPE)
       .array()
       .min(1, { message: "少なくとも1つのセンサーを選択してください" }),
-    command: z.object({
+    sensorId: z.object({
       temperature: z.string().optional(),
       humidity: z.string().optional(),
       pressure: z.string().optional(),
@@ -70,11 +70,11 @@ export const CreateNodeSchema = z
   })
   .superRefine((data, ctx) => {
     data.type.forEach((type) => {
-      if (!data.command[type]) {
+      if (!data.sensorId[type]) {
         ctx.addIssue({
           code: "custom",
-          path: ["command", type],
-          message: "コマンドを入力してください",
+          path: ["sensorId", type],
+          message: "センサー番号を入力してください",
         });
       }
     });
@@ -109,7 +109,7 @@ export const UpdateNodeSchema = z
       .enum(SENSOR_TYPE)
       .array()
       .min(1, { message: "少なくとも1つのセンサーを選択してください" }),
-    command: z.object({
+    sensorId: z.object({
       temperature: z.string().optional(),
       humidity: z.string().optional(),
       pressure: z.string().optional(),
@@ -118,11 +118,11 @@ export const UpdateNodeSchema = z
   })
   .superRefine((data, ctx) => {
     data.type.forEach((type) => {
-      if (!data.command[type]) {
+      if (!data.sensorId[type]) {
         ctx.addIssue({
           code: "custom",
-          path: ["command", type],
-          message: "コマンドを入力してください",
+          path: ["sensorId", type],
+          message: "センサー番号を入力してください",
         });
       }
     });
