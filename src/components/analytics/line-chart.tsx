@@ -1,13 +1,16 @@
 "use client";
 
 import {
+  Brush,
   CartesianGrid,
   Line,
   LineChart as LineReChart,
   XAxis,
   YAxis,
 } from "recharts";
-import { CSSProperties, Fragment, memo } from "react";
+import { CSSProperties, Fragment, memo, useMemo } from "react";
+import { addSeconds, format } from "date-fns";
+import { Loader2 } from "lucide-react";
 
 import {
   ChartConfig,
@@ -15,88 +18,122 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const data = [
-  { time: new Date("2024-12-01T00:00:01"), temperature: 72 },
-  { time: new Date("2024-12-01T00:00:02"), temperature: 75 },
-  { time: new Date("2024-12-01T00:00:03"), temperature: 78 },
-  { time: new Date("2024-12-01T00:00:04"), temperature: 73 },
-  { time: new Date("2024-12-01T00:00:05"), temperature: 79 },
-  { time: new Date("2024-12-01T00:00:06"), temperature: 81 },
-  { time: new Date("2024-12-01T00:00:07"), temperature: 77 },
-  { time: new Date("2024-12-01T00:00:08"), temperature: 80 },
-  { time: new Date("2024-12-01T00:00:09"), temperature: 82 },
-  { time: new Date("2024-12-01T00:00:10"), temperature: 79 },
-  { time: new Date("2024-12-01T00:00:11"), temperature: 85 },
-  { time: new Date("2024-12-01T00:00:12"), temperature: 83 },
-  { time: new Date("2024-12-01T00:00:13"), temperature: 86 },
-  { time: new Date("2024-12-01T00:00:14"), temperature: 84 },
-  { time: new Date("2024-12-01T00:00:15"), temperature: 87 },
-  { time: new Date("2024-12-01T00:00:16"), temperature: 85 },
-  { time: new Date("2024-12-01T00:00:17"), temperature: 88 },
-  { time: new Date("2024-12-01T00:00:18"), temperature: 86 },
-  { time: new Date("2024-12-01T00:00:19"), temperature: 89 },
-  { time: new Date("2024-12-01T00:00:20"), temperature: 87 },
-];
+import { VStack } from "../ui/vstack";
+import { HStack } from "../ui/hstack";
 
 const chartConfig = {
-  temperature: {
+  value: {
     label: "温度",
     color: "#7475f3",
   },
 } satisfies ChartConfig;
 
-const LineChart = memo(() => {
+type LineChartProps = {
+  date: string;
+  data: { timestamp: number; value: number }[];
+  isLoading: boolean;
+};
+
+const LineChart = memo(({ date, data, isLoading }: LineChartProps) => {
+  const ticks = useMemo(() => {
+    const interval: number[] = [];
+    for (let i = 0; i <= 24 * 3600; i++) {
+      interval.push(i);
+    }
+    return interval;
+  }, []);
+
+  if (isLoading) {
+    return (
+      <HStack className="h-[320px] w-full justify-center space-x-2 pt-[120px] text-neutral-500 dark:text-neutral-400">
+        <Loader2 className="size-4 animate-spin" />
+        <span className="text-xs">読み込み中...</span>
+      </HStack>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <VStack className="h-[320px] w-full items-center space-y-2 pt-[100px]">
+        <h3 className="text-lg font-semibold">データがありません</h3>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          センサー番号が正しいか確認してください。
+        </p>
+      </VStack>
+    );
+  }
+
   return (
-    <div className="w-full">
-      <ChartContainer className="h-[300px] w-full" config={chartConfig}>
-        <LineReChart data={data}>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="time"
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(time) => new Date(time).getSeconds().toString()}
-          />
-          <YAxis tickLine={false} axisLine={false} width={30} />
-          <ChartTooltip
-            cursor={false}
-            content={
-              <ChartTooltipContent
-                hideLabel
-                formatter={(value, name) => (
-                  <Fragment>
-                    <div
-                      className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
-                      style={
-                        {
-                          "--color-bg": `var(--color-${name})`,
-                        } as CSSProperties
-                      }
-                    />
-                    {chartConfig[name as keyof typeof chartConfig]?.label ||
-                      name}
-                    <div className="ml-auto flex items-baseline gap-0.5 font-mono tabular-nums">
-                      {value}
-                      <span>°C</span>
-                    </div>
-                  </Fragment>
-                )}
-                className="bg-white"
-              />
-            }
-          />
-          <Line
-            isAnimationActive={false}
-            dataKey="temperature"
-            type="linear"
-            stroke="#7475f3"
-            strokeWidth={2}
-            dot={{ fill: "#7475f3", r: 2 }}
-          />
-        </LineReChart>
-      </ChartContainer>
-    </div>
+    <ChartContainer className="h-[320px] w-full" config={chartConfig}>
+      <LineReChart data={data}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="timestamp"
+          ticks={ticks}
+          tickFormatter={(value: number) => {
+            const base = new Date(`${date}T00:00:00Z`);
+            const tick = format(addSeconds(base, value), "HH:mm:ss");
+            return tick;
+          }}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis tickLine={false} axisLine={false} width={30} />
+        <ChartTooltip
+          cursor={false}
+          content={
+            <ChartTooltipContent
+              hideLabel
+              formatter={(value, name) => (
+                <Fragment>
+                  <div
+                    className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
+                    style={
+                      {
+                        "--color-bg": `var(--color-${name})`,
+                      } as CSSProperties
+                    }
+                  />
+                  {chartConfig[name as keyof typeof chartConfig]?.label || name}
+                  <div className="ml-auto flex items-baseline gap-0.5 font-mono tabular-nums">
+                    {Number(value).toFixed(2)}
+                    <span>°C</span>
+                  </div>
+                </Fragment>
+              )}
+              className="bg-white"
+            />
+          }
+        />
+        <Brush
+          dataKey="timestamp"
+          startIndex={0}
+          endIndex={Math.round(data.length / 4)}
+          height={40}
+          travellerWidth={2}
+          stroke="transparent"
+        >
+          <LineReChart data={data}>
+            <Line
+              isAnimationActive={false}
+              dataKey="value"
+              type="monotone"
+              stroke="#7475f3"
+              strokeWidth={1.5}
+              dot={false}
+            />
+          </LineReChart>
+        </Brush>
+        <Line
+          isAnimationActive={false}
+          dataKey="value"
+          type="monotone"
+          stroke="#7475f3"
+          strokeWidth={2}
+          dot={{ fill: "#7475f3", r: 2 }}
+        />
+      </LineReChart>
+    </ChartContainer>
   );
 });
 

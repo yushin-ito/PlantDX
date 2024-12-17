@@ -62,7 +62,7 @@ const ActionsPresenter = memo(
                     <TableCell colSpan={TableColumns.length}>
                       <HStack className="w-full items-center justify-center space-x-2 text-neutral-500 dark:text-neutral-400">
                         <Loader2 className="size-4 animate-spin" />
-                        <span>読み込み中</span>
+                        <span>読み込み中...</span>
                       </HStack>
                     </TableCell>
                   </TableRow>

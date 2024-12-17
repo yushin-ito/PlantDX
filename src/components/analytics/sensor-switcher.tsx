@@ -1,8 +1,9 @@
 "use client";
 
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "../ui/button";
 import {
@@ -16,17 +17,40 @@ import {
 } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Center } from "../ui/center";
+import { Node, Sensor, SensorType } from "@/types";
 
-const sensors = [
-  {
-    sensorId: 1,
-    name: "MEOHタンク",
-  },
-];
+const labels: Record<SensorType, string> = {
+  temperature: "温度",
+  humidity: "湿度",
+  pressure: "圧力",
+  volume: "容量",
+};
 
-const SensorSwitcher = memo(() => {
+type SensorSwitcherProps = {
+  sensorId: number | null;
+  sensors: (Sensor["Row"] & { node: Node["Row"] | null })[];
+};
+
+const SensorSwitcher = memo(({ sensorId, sensors }: SensorSwitcherProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [isOpenPopover, setIsOpenPopover] = useState(false);
-  const [selected, setSelected] = useState(sensors[0]);
+  const [selected, setSelected] = useState<
+    (Sensor["Row"] & { node: Node["Row"] | null }) | null
+  >(null);
+
+  useEffect(() => {
+    if (sensors && sensors.length > 0) {
+      const sensor = sensors.find((sensor) => sensor.sensorId === sensorId);
+
+      if (sensor) {
+        setSelected(sensor);
+      } else {
+        router.push(`${pathname}?id=${sensors[0].sensorId}`);
+      }
+    }
+  }, [sensors, sensorId, router, pathname]);
 
   return (
     <Popover open={isOpenPopover} onOpenChange={setIsOpenPopover}>
@@ -36,7 +60,11 @@ const SensorSwitcher = memo(() => {
           aria-expanded={isOpenPopover}
           className="h-9 w-[200px] justify-between py-2 text-xs"
         >
-          <span>{selected.name}</span>
+          {selected && (
+            <span>{`${selected.node?.name}（${
+              labels[selected.type as SensorType]
+            }）`}</span>
+          )}
           <ChevronsUpDown className="size-4" />
         </Button>
       </PopoverTrigger>
@@ -48,21 +76,28 @@ const SensorSwitcher = memo(() => {
           />
           <CommandList>
             <CommandEmpty>
-              <Center className="h-4 text-xs">センサーが見つかりません</Center>
+              <Center className="h-16 text-xs">センサーが見つかりません</Center>
             </CommandEmpty>
             {sensors.map((sensor, index) => (
               <CommandGroup key={index}>
                 <CommandItem
                   onSelect={() => {
+                    // document.cookie = `sensorId=${sensor.sensorId}; path=/`;
+
+                    router.push(`${pathname}?id=${sensor.sensorId}`);
+                    router.refresh();
+
                     setSelected(sensor);
                     setIsOpenPopover(false);
                   }}
                   className="flex justify-between text-xs"
                 >
-                  {sensor.name}
+                  {`${sensor.node?.name}（${
+                    labels[sensor.type as SensorType]
+                  }）`}
                   <Check
                     className={
-                      selected.sensorId === sensor.sensorId
+                      selected?.sensorId === sensor.sensorId
                         ? "opacity-100"
                         : "opacity-0"
                     }

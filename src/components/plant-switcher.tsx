@@ -58,13 +58,13 @@ const PlantSwitcher = memo(
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
-            <CommandInput
-              placeholder="プラントを検索"
-              className="placeholder:text-xs"
-            />
             <CommandList>
+              <CommandInput
+                placeholder="プラントを検索"
+                className="placeholder:text-xs"
+              />
               <CommandEmpty className="text-xs">
-                <Center className="h-4 text-xs">
+                <Center className="h-16 text-xs">
                   プラントが見つかりません
                 </Center>
               </CommandEmpty>

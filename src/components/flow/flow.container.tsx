@@ -22,13 +22,7 @@ import {
 import toast from "react-hot-toast";
 import { z } from "zod";
 
-import {
-  getEdges,
-  getNodes,
-  getPlants,
-  getSensors,
-  getRecords,
-} from "@/functions/query";
+import { getEdges, getNodes, getSensors } from "@/functions/query";
 import { createBrowserClient } from "@/functions/browser";
 import FlowPresenter from "./flow.presenter";
 import CustomEdge from "./custom-edge";
@@ -54,11 +48,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
   const savedNodes = useQuery(getNodes(supabase, "plantId", plantId));
   const savedEdes = useQuery(getEdges(supabase, "plantId", plantId));
 
-  const plant = useQuery(getPlants(supabase, "plantId", plantId).single());
   const sensors = useQuery(getSensors(supabase, "plantId", plantId));
-  const records = useQuery(
-    getRecords(supabase, "plantId", plantId).eq("count", plant.count || -1)
-  );
 
   // センサーデータの監視
   useSubscriptionQuery(
@@ -193,14 +183,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
 
       setEdges(initialEdes);
     }
-  }, [
-    savedNodes.data,
-    savedEdes.data,
-    sensors.data,
-    records.data,
-    setNodes,
-    setEdges,
-  ]);
+  }, [savedNodes.data, savedEdes.data, sensors.data, setNodes, setEdges]);
 
   const onConnect: OnConnect = useCallback(
     async (params) => {

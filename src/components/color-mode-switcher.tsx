@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Check, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { memo } from "react";
 
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const ColorModeSwitcher = memo(() => {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -24,14 +24,26 @@ const ColorModeSwitcher = memo(() => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+        <DropdownMenuItem
+          onClick={() => setTheme("light")}
+          className="justify-between"
+        >
           ライト
+          <Check className={theme === "light" ? "opacity-100" : "opacity-0"} />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem
+          onClick={() => setTheme("dark")}
+          className="justify-between"
+        >
           ダーク
+          <Check className={theme === "dark" ? "opacity-100" : "opacity-0"} />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem
+          onClick={() => setTheme("system")}
+          className="justify-between"
+        >
           システム
+          <Check className={theme === "system" ? "opacity-100" : "opacity-0"} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -46,7 +46,12 @@ export const getSensors = <Column extends keyof Sensor["Row"]>(
   supabase: SupabaseClient<Database>,
   column: Column,
   value: Exclude<Sensor["Row"][Column], null>
-) => supabase.from("sensor").select().eq(column, value).throwOnError();
+) =>
+  supabase
+    .from("sensor")
+    .select("*, node:node(*)")
+    .eq(column, value)
+    .throwOnError();
 
 export const getRecords = <Column extends keyof Record["Row"]>(
   supabase: SupabaseClient<Database>,
