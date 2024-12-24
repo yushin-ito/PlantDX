@@ -383,6 +383,7 @@ export type Database = {
           plantId: number
           sensorId: number
           type: string
+          unit: string
           updatedAt: string
           value: number | null
         }
@@ -392,6 +393,7 @@ export type Database = {
           plantId: number
           sensorId?: number
           type: string
+          unit: string
           updatedAt?: string
           value?: number | null
         }
@@ -401,6 +403,7 @@ export type Database = {
           plantId?: number
           sensorId?: number
           type?: string
+          unit?: string
           updatedAt?: string
           value?: number | null
         }

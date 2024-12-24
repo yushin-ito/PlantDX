@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react";
-import { Dispatch, memo, SetStateAction, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { notFound, usePathname, useRouter } from "next/navigation";
 
 import { Button } from "./ui/button";
@@ -17,15 +17,16 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Plant } from "@/types";
 import { Center } from "./ui/center";
+import { HStack } from "./ui/hstack";
 
 type PlantSwitcherProps = {
   plantId: number;
   plants: Plant["Row"][];
-  setIsOpenModal: Dispatch<SetStateAction<boolean>>;
+  onSwitch?: () => void;
 };
 
 const PlantSwitcher = memo(
-  ({ plantId, plants, setIsOpenModal }: PlantSwitcherProps) => {
+  ({ plantId, plants, onSwitch }: PlantSwitcherProps) => {
     const router = useRouter();
     const basename = usePathname().split("/")[2];
 
@@ -80,16 +81,17 @@ const PlantSwitcher = memo(
                       setSelected(plant);
                       setIsOpenPopover(false);
                     }}
-                    className="flex justify-between text-xs"
                   >
-                    {plant.name}
-                    <Check
-                      className={
-                        selected?.plantId === plant.plantId
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }
-                    />
+                    <HStack className="w-full items-center justify-between text-xs">
+                      {plant.name}
+                      <Check
+                        className={
+                          selected?.plantId === plant.plantId
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }
+                      />
+                    </HStack>
                   </CommandItem>
                 </CommandGroup>
               ))}
@@ -100,7 +102,7 @@ const PlantSwitcher = memo(
                 <CommandItem
                   onSelect={() => {
                     setIsOpenPopover(false);
-                    setIsOpenModal(true);
+                    onSwitch?.();
                   }}
                   className="text-xs"
                 >

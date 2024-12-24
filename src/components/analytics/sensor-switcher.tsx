@@ -18,6 +18,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Center } from "../ui/center";
 import { Node, Sensor, SensorType } from "@/types";
+import { HStack } from "../ui/hstack";
 
 const labels: Record<SensorType, string> = {
   temperature: "温度",
@@ -29,103 +30,111 @@ const labels: Record<SensorType, string> = {
 type SensorSwitcherProps = {
   sensorId: number | null;
   sensors: (Sensor["Row"] & { node: Node["Row"] | null })[];
+  onSwitch?: () => void;
 };
 
-const SensorSwitcher = memo(({ sensorId, sensors }: SensorSwitcherProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
+const SensorSwitcher = memo(
+  ({ sensorId, sensors, onSwitch }: SensorSwitcherProps) => {
+    const router = useRouter();
+    const pathname = usePathname();
 
-  const [isOpenPopover, setIsOpenPopover] = useState(false);
-  const [selected, setSelected] = useState<
-    (Sensor["Row"] & { node: Node["Row"] | null }) | null
-  >(null);
+    const [isOpenPopover, setIsOpenPopover] = useState(false);
+    const [selected, setSelected] = useState<
+      (Sensor["Row"] & { node: Node["Row"] | null }) | null
+    >(null);
 
-  useEffect(() => {
-    if (sensors && sensors.length > 0) {
-      const sensor = sensors.find((sensor) => sensor.sensorId === sensorId);
+    useEffect(() => {
+      if (sensors && sensors.length > 0) {
+        const sensor = sensors.find((sensor) => sensor.sensorId === sensorId);
 
-      if (sensor) {
-        setSelected(sensor);
-      } else {
-        router.push(`${pathname}?id=${sensors[0].sensorId}`);
+        if (sensor) {
+          setSelected(sensor);
+        } else {
+          router.push(`${pathname}?id=${sensors[0].sensorId}`);
+        }
       }
-    }
-  }, [sensors, sensorId, router, pathname]);
+    }, [sensors, sensorId, router, pathname]);
 
-  return (
-    <Popover open={isOpenPopover} onOpenChange={setIsOpenPopover}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          aria-expanded={isOpenPopover}
-          className="h-9 w-[200px] justify-between py-2 text-xs"
-        >
-          {selected && (
-            <span>{`${selected.node?.name}（${
-              labels[selected.type as SensorType]
-            }）`}</span>
-          )}
-          <ChevronsUpDown className="size-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput
-            placeholder="センサーを検索"
-            className="placeholder:text-xs"
-          />
-          <CommandList>
-            <CommandEmpty>
-              <Center className="h-16 text-xs">センサーが見つかりません</Center>
-            </CommandEmpty>
-            {sensors.map((sensor, index) => (
-              <CommandGroup key={index}>
-                <CommandItem
-                  onSelect={() => {
-                    // document.cookie = `sensorId=${sensor.sensorId}; path=/`;
+    return (
+      <Popover open={isOpenPopover} onOpenChange={setIsOpenPopover}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            aria-expanded={isOpenPopover}
+            className="h-9 w-[200px] justify-between py-2 text-xs"
+          >
+            <HStack>
+              <span>{selected?.node?.name}</span>
+              {selected && (
+                <span>{`（${labels[selected.type as SensorType]}）`}</span>
+              )}
+            </HStack>
+            <ChevronsUpDown className="size-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[200px] p-0">
+          <Command>
+            <CommandInput
+              placeholder="センサーを検索"
+              className="placeholder:text-xs"
+            />
+            <CommandList>
+              <CommandEmpty>
+                <Center className="h-16 text-xs">
+                  センサーが見つかりません
+                </Center>
+              </CommandEmpty>
+              {sensors.map((sensor, index) => (
+                <CommandGroup key={index}>
+                  <CommandItem
+                    onSelect={() => {
+                      // document.cookie = `sensorId=${sensor.sensorId}; path=/`;
 
-                    router.push(`${pathname}?id=${sensor.sensorId}`);
-                    router.refresh();
+                      router.push(`${pathname}?id=${sensor.sensorId}`);
+                      router.refresh();
 
-                    setSelected(sensor);
-                    setIsOpenPopover(false);
-                  }}
-                  className="flex justify-between text-xs"
-                >
-                  {`${sensor.node?.name}（${
-                    labels[sensor.type as SensorType]
-                  }）`}
-                  <Check
-                    className={
-                      selected?.sensorId === sensor.sensorId
-                        ? "opacity-100"
-                        : "opacity-0"
-                    }
-                  />
-                </CommandItem>
+                      setSelected(sensor);
+                      setIsOpenPopover(false);
+                    }}
+                  >
+                    <HStack className="w-full items-center justify-between text-xs">
+                      {`${sensor.node?.name}（${
+                        labels[sensor.type as SensorType]
+                      }）`}
+                      <Check
+                        className={
+                          selected?.sensorId === sensor.sensorId
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }
+                      />
+                    </HStack>
+                  </CommandItem>
+                </CommandGroup>
+              ))}
+            </CommandList>
+            <CommandSeparator />
+            <CommandList>
+              <CommandGroup>
+                <Link href="/">
+                  <CommandItem
+                    onSelect={() => {
+                      setIsOpenPopover(false);
+                      onSwitch?.();
+                    }}
+                    className="text-xs"
+                  >
+                    <PlusCircle className="size-4" />
+                    センサーを追加
+                  </CommandItem>
+                </Link>
               </CommandGroup>
-            ))}
-          </CommandList>
-          <CommandSeparator />
-          <CommandList>
-            <CommandGroup>
-              <Link href="/">
-                <CommandItem
-                  onSelect={() => {
-                    setIsOpenPopover(false);
-                  }}
-                  className="text-xs"
-                >
-                  <PlusCircle className="size-4" />
-                  センサーを追加
-                </CommandItem>
-              </Link>
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-});
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  }
+);
 
 export default SensorSwitcher;

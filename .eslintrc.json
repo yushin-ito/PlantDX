@@ -9,6 +9,7 @@
   "plugins": ["tailwindcss", "unused-imports", "import"],
   "rules": {
     "react/display-name": "off",
+    "tailwindcss/no-custom-classname": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": "warn",
     "import/order": [

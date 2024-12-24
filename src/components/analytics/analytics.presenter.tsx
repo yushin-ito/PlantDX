@@ -1,44 +1,84 @@
-import { memo } from "react";
-import { differenceInSeconds, parseISO, startOfDay } from "date-fns";
+import { Dispatch, memo, RefObject, SetStateAction } from "react";
+import { differenceInSeconds, format, parseISO, startOfDay } from "date-fns";
 
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { VStack } from "../ui/vstack";
 import { HStack } from "../ui/hstack";
-import ChartToolbar from "./chart-toolbar";
+import LineChartToolbar from "./line-chart-toolbar";
 import SensorSwitcher from "./sensor-switcher";
 import LineChart from "./line-chart";
-import Metrics from "./metrics";
-import { Sensor, Node, Record } from "@/types";
+import { Sensor, Node, Record, ChartStyle, FileType } from "@/types";
+import Statistics from "./statistics";
+import { Skeleton } from "../ui/skeleton";
 
 type AnalyticsPresenterProps = {
+  chartWrapper: RefObject<HTMLDivElement>;
   sensorId: number | null;
+  date: Date;
+  setDate: Dispatch<SetStateAction<Date>>;
+  period: {
+    start: Date;
+    end: Date;
+  } | null;
+  setPeriod: Dispatch<SetStateAction<{ start: Date; end: Date } | null>>;
+  style: ChartStyle;
+  setStyle: Dispatch<SetStateAction<ChartStyle>>;
   sensors: (Sensor["Row"] & { node: Node["Row"] | null })[];
   records: Record["Row"][];
+  isLoadingSensors: boolean;
   isLoadingRecords: boolean;
+  image: string | null;
+  getPreview: () => void;
+  onExport: ({ name, type }: { name: string; type: FileType }) => void;
 };
 
 const AnalyticsPresenter = memo(
   ({
+    chartWrapper,
     sensorId,
+    date,
+    setDate,
+    period,
+    setPeriod,
+    style,
+    setStyle,
     sensors,
     records,
+    isLoadingSensors,
     isLoadingRecords,
+    image,
+    getPreview,
+    onExport,
   }: AnalyticsPresenterProps) => {
     const values = records.map((record) => record.value);
+    const sensor = sensors.find((sensor) => sensor.sensorId === sensorId);
 
     return (
-      <HStack className="mt-6 w-full space-x-6 px-10">
-        <VStack className="w-full items-center space-y-6 overflow-auto">
-          <Card className="w-full">
-            <CardHeader className="w-full">
-              <HStack className="w-full items-center justify-between">
-                <CardTitle>MEOHタンク</CardTitle>
+      <HStack className="my-6 space-x-6 px-10">
+        <VStack className="h-[600px] w-full items-center space-y-6">
+          <Card className="size-full">
+            <CardHeader>
+              <HStack className="items-center justify-between">
+                {isLoadingSensors ? (
+                  <Skeleton className="h-4 w-20" />
+                ) : (
+                  <CardTitle>{sensor?.node?.name}</CardTitle>
+                )}
                 <SensorSwitcher sensorId={sensorId} sensors={sensors} />
               </HStack>
             </CardHeader>
-            <CardContent className="py-4">
+            <CardContent className="pb-4 pt-2">
               <LineChart
-                date="2024-12-01"
+                chartWrapper={chartWrapper}
+                date={format(date, "yyyy-MM-dd")}
+                period={
+                  period
+                    ? {
+                        start: format(period.start, "yyyy-MM-dd"),
+                        end: format(period.end, "yyyy-MM-dd"),
+                      }
+                    : null
+                }
                 data={records.map((record) => ({
                   timestamp: differenceInSeconds(
                     parseISO(record.createdAt),
@@ -46,29 +86,37 @@ const AnalyticsPresenter = memo(
                   ),
                   value: record.value,
                 }))}
+                type={sensor?.type || ""}
+                unit={sensor?.unit || ""}
+                style={style}
                 isLoading={isLoadingRecords}
               />
             </CardContent>
           </Card>
-          <Card className="w-full">
-            <CardContent className="py-6">
-              <Metrics
-                current={values[values.length - 1] || 0}
-                max={Math.max(...values, 0)}
-                min={Math.min(...values, 0)}
-                average={
-                  values.length > 0
-                    ? values.reduce((sum, value) => sum + value, 0) /
-                      values.length
-                    : 0
-                }
+          <Card className="h-[150px] w-full items-center">
+            <CardContent className="h-full py-0">
+              <Statistics
+                values={values}
+                unit={sensor?.unit || ""}
+                isLoading={isLoadingRecords}
               />
             </CardContent>
           </Card>
         </VStack>
-        <Card className="w-[400px]">
-          <CardContent className="w-full py-4">
-            <ChartToolbar />
+        <Card className="h-[600px] w-[450px]">
+          <CardContent className="size-full p-4">
+            <LineChartToolbar
+              date={date}
+              setDate={setDate}
+              period={period}
+              setPeriod={setPeriod}
+              style={style}
+              setStyle={setStyle}
+              image={image}
+              name={sensor?.node?.name || ""}
+              getPreview={getPreview}
+              onExport={onExport}
+            />
           </CardContent>
         </Card>
       </HStack>

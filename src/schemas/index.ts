@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   CONTROL_EVENT,
   CONTROL_TYPE,
+  FILE_TYPE,
   PLANT_TEMPLATE,
   SENSOR_TYPE,
 } from "@/constants";
@@ -127,3 +128,8 @@ export const UpdateNodeSchema = z
       }
     });
   });
+
+export const ExportSchema = z.object({
+  name: z.string().min(1, { message: "ファイル名を入力してください" }),
+  type: z.enum(FILE_TYPE),
+});

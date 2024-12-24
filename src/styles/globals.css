@@ -21,32 +21,8 @@ body {
   display: none;
 }
 
-.recharts-brush-texts {
-  display: none;
-}
-
-.recharts-brush-slide {
-  fill: #a3a3a3;
-  opacity: 1;
-}
-
-.recharts-brush-traveller {
-  fill: #a3a3a3;
-  opacity: 0.2;
-}
-
 @layer base {
   body {
-    @apply text-[#151d48] dark:text-white font-medium;
-  }
-}
-
-@layer utilities {
-  .hidden-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hidden-scrollbar::-webkit-scrollbar {
-    display: none;
+    @apply text-brand-900 dark:text-white font-medium;
   }
 }

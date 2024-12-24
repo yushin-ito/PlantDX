@@ -26,3 +26,5 @@ export const CONTROL_EVENT = [
 ] as const;
 
 export const CONTROL_STATUS = ["active", "inactive", "pending"] as const;
+
+export const FILE_TYPE = ["png", "jpg"] as const;

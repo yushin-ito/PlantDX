@@ -93,7 +93,9 @@ const Header = memo(({ userId, plantId }: HeaderProps) => {
           <PlnatSwitcher
             plantId={plantId}
             plants={plants || []}
-            setIsOpenModal={setIsOpenModal}
+            onSwitch={() => {
+              setIsOpenModal(true);
+            }}
           />
           <ColorModeSwitcher />
         </HStack>

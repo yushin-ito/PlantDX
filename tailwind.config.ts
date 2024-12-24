@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        "2xs": "0.675rem",
+      },
       colors: {
         brand: {
           100: "#afaffc",
@@ -19,7 +22,7 @@ const config: Config = {
           600: "#5d5fef",
           700: "#4b4de9",
           800: "#3a3bd6",
-          900: "#2929c4",
+          900: "#151d48",
         },
       },
       zIndex: {
