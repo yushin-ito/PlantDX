@@ -24,7 +24,7 @@ const routes = [
   },
   {
     label: "ログ",
-    href: "actions",
+    href: "history",
     icon: Clock,
   },
   {
@@ -63,7 +63,7 @@ const NavBar = memo(() => {
   };
 
   return (
-    <nav>
+    <nav className="hidden md:block">
       <VStack className="h-full w-[240px] items-center justify-between border-r px-6 py-12 dark:border-neutral-800">
         <VStack className="w-full space-y-8">
           {routes.map(({ label, href, icon: Icon }, index) => (
@@ -72,8 +72,7 @@ const NavBar = memo(() => {
               href={href}
               className={cn(
                 buttonVariants({
-                  variant:
-                    href === pathname.split("/")[2] ? "brand" : "ghost",
+                  variant: href === pathname.split("/")[2] ? "brand" : "ghost",
                 }),
                 "relative w-full rounded-lg"
               )}

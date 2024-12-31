@@ -1,7 +1,8 @@
 "use client";
 
 import { ChartLine, ChartSpline, ChartScatter } from "lucide-react";
-import { Dispatch, memo, SetStateAction, useState } from "react";
+import { Dispatch, memo, SetStateAction } from "react";
+import { AnimationTiming } from "recharts/types/util/types";
 
 import { HStack } from "../ui/hstack";
 import { VStack } from "../ui/vstack";
@@ -18,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { AnimationTiming } from "recharts/types/util/types";
 
 type StyleTabProps = {
   style: ChartStyle;
@@ -65,7 +65,7 @@ const StyleTab = memo(({ style, setStyle }: StyleTabProps) => (
         </Button>
       </HStack>
     </VStack>
-    <VStack className="w-full mt-6 space-y-2">
+    <VStack className="mt-6 w-full space-y-2">
       <Label className="text-xs">X軸</Label>
       <HStack className="h-8 w-full rounded-lg border border-neutral-200 dark:border-neutral-800">
         <Button
@@ -144,7 +144,7 @@ const StyleTab = memo(({ style, setStyle }: StyleTabProps) => (
         />
       </VStack>
     </HStack>
-    <VStack className="w-full mt-6 space-y-2">
+    <VStack className="mt-6 w-full space-y-2">
       <Label className="text-xs">Y軸</Label>
       <HStack className="h-8 w-full rounded-lg border border-neutral-200  dark:border-neutral-800">
         <Button
@@ -225,7 +225,7 @@ const StyleTab = memo(({ style, setStyle }: StyleTabProps) => (
         />
       </VStack>
     </HStack>
-    <VStack className="w-full mt-6 space-y-2">
+    <VStack className="mt-6 w-full space-y-2">
       <Label className="text-xs">グリッド</Label>
       <HStack className="h-8 w-full rounded-lg border border-neutral-200 dark:border-neutral-800">
         <Button
@@ -278,7 +278,7 @@ const StyleTab = memo(({ style, setStyle }: StyleTabProps) => (
         </Button>
       </HStack>
     </VStack>
-    <VStack className="w-full mt-6 space-y-2">
+    <VStack className="mt-6 w-full space-y-2">
       <Label className="text-xs">アニメーション</Label>
       <HStack className="h-8 w-full rounded-lg border border-neutral-200  dark:border-neutral-800">
         <Button

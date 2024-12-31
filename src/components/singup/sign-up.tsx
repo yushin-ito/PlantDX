@@ -119,7 +119,7 @@ const SignUp = () => {
                   />
 
                   {error && (
-                    <HStack className="space-x-1 rounded-md bg-red-100 p-3 text-sm text-red-500 dark:bg-red-500 dark:text-white">
+                    <HStack className="space-x-1 rounded-md bg-red-100 p-3 text-sm text-red-500 dark:bg-red-500 dark:text-neutral-50">
                       <AlertCircle className="size-5" />
                       <span>{error}</span>
                     </HStack>

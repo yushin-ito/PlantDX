@@ -2,7 +2,7 @@ export const AUTH_ROUTE = ["signup", "login", "verify"] as const;
 export const DASHBOARD_ROUTE = [
   "flow",
   "analytics",
-  "actions",
+  "history",
   "control",
   "settings",
 ] as const;

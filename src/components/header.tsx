@@ -14,13 +14,15 @@ import { HStack } from "./ui/hstack";
 import { createBrowserClient } from "@/functions/browser";
 import { getMembers } from "@/functions/query";
 import { CreatePlantSchema } from "@/schemas";
-import CreatePlantModal from "./create-plant.modal";
+import CreatePlantSheet from "./create-plant-sheet";
 import { DashboardRoute } from "@/types";
+import useBreakpoint from "@/hooks/use-breakpoint";
+import NavDrawer from "./nav-drawer";
 
 const routes: Record<DashboardRoute, string> = {
   flow: "フロー",
   analytics: "分析",
-  actions: "ログ",
+  history: "ログ",
   control: "操作",
   settings: "設定",
 };
@@ -32,7 +34,9 @@ type HeaderProps = {
 
 const Header = memo(({ userId, plantId }: HeaderProps) => {
   const basename = usePathname().split("/")[2];
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const breakpoint = useBreakpoint({ fallback: "sm" });
+
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
 
   const supabase = createBrowserClient();
 
@@ -85,24 +89,27 @@ const Header = memo(({ userId, plantId }: HeaderProps) => {
 
   return (
     <header className="w-full">
-      <HStack className="items-center justify-between px-8 pb-2 pt-4">
+      <HStack className="items-center justify-between px-8 pb-2 pt-6 sm:pt-4">
         <h2 className="text-xl font-bold">
           {routes[basename as DashboardRoute]}
         </h2>
         <HStack className="space-x-4">
-          <PlnatSwitcher
-            plantId={plantId}
-            plants={plants || []}
-            onSwitch={() => {
-              setIsOpenModal(true);
-            }}
-          />
+          {breakpoint !== "sm" && (
+            <PlnatSwitcher
+              plantId={plantId}
+              plants={plants || []}
+              onSwitch={() => {
+                setIsOpenSheet(true);
+              }}
+            />
+          )}
           <ColorModeSwitcher />
+          {(breakpoint === "sm" || breakpoint === "md") && <NavDrawer />}
         </HStack>
       </HStack>
-      <CreatePlantModal
-        isOpen={isOpenModal}
-        setIsOpen={setIsOpenModal}
+      <CreatePlantSheet
+        isOpen={isOpenSheet}
+        setIsOpen={setIsOpenSheet}
         createPlantHandler={createPlantHandler}
         isLoadingCreatePlant={isLoadingInsertPlant || isLoadingInsertMember}
       />

@@ -19,7 +19,7 @@ type CustomNodeProps = {
       humidity: number;
       pressure: number;
       volume: number;
-    }
+    };
     type: SensorType[];
   };
   isConnectable: boolean;
@@ -40,7 +40,7 @@ const CustomNode = memo(
               className="absolute right-1 top-1"
               onClick={onEdit}
             >
-              <Edit className="size-3.5" strokeWidth="2.4" />
+              <Edit className="size-3.5" />
             </Button>
           )}
           <VStack className="relative w-full items-center space-y-4">
@@ -59,7 +59,7 @@ const CustomNode = memo(
                       }}
                     />
                   </div>
-                  <div className="flex h-4 w-8 items-center justify-center rounded-full border-[1.2px] border-red-500 bg-red-100 text-[8px] text-red-500 dark:border-none dark:bg-red-500 dark:text-white">
+                  <div className="flex h-4 w-8 items-center justify-center rounded-full border-[1.2px] border-red-500 bg-red-100 text-[8px] text-red-500 dark:border-none dark:bg-red-500 dark:text-neutral-50">
                     {data.value.temperature}°C
                   </div>
                 </HStack>
@@ -77,7 +77,7 @@ const CustomNode = memo(
                       }}
                     />
                   </div>
-                  <Center className="h-4 w-8 rounded-full border-[1.2px] border-blue-500 bg-blue-100 text-[8px] text-blue-500 dark:border-none dark:bg-blue-500 dark:text-white">
+                  <Center className="h-4 w-8 rounded-full border-[1.2px] border-blue-500 bg-blue-100 text-[8px] text-blue-500 dark:border-none dark:bg-blue-500 dark:text-neutral-50">
                     {data.value.humidity}%
                   </Center>
                 </HStack>
@@ -95,7 +95,7 @@ const CustomNode = memo(
                       }}
                     />
                   </div>
-                  <Center className="h-4 w-8 rounded-full border-[1.2px] border-green-500 bg-green-100 text-[8px] text-green-500 dark:border-none dark:bg-green-500 dark:text-white">
+                  <Center className="h-4 w-8 rounded-full border-[1.2px] border-green-500 bg-green-100 text-[8px] text-green-500 dark:border-none dark:bg-green-500 dark:text-neutral-50">
                     {data.value.pressure}hPa
                   </Center>
                 </HStack>
@@ -142,7 +142,7 @@ const CustomNode = memo(
             position={Position.Top}
             id="source-top"
             isConnectable={isConnectable}
-            className="!border-none dark:bg-white"
+            className="!border-none dark:bg-neutral-50"
             style={{ opacity: isConnectable ? 1 : 0 }}
           />
 
@@ -158,7 +158,7 @@ const CustomNode = memo(
             position={Position.Right}
             id="source-right"
             isConnectable={isConnectable}
-            className="!border-none dark:bg-white"
+            className="!border-none dark:bg-neutral-50"
             style={{ opacity: isConnectable ? 1 : 0 }}
           />
 
@@ -174,7 +174,7 @@ const CustomNode = memo(
             position={Position.Bottom}
             id="source-bottom"
             isConnectable={isConnectable}
-            className="!border-none dark:bg-white"
+            className="!border-none dark:bg-neutral-50"
             style={{ opacity: isConnectable ? 1 : 0 }}
           />
 
@@ -190,7 +190,7 @@ const CustomNode = memo(
             position={Position.Left}
             id="source-left"
             isConnectable={isConnectable}
-            className="!border-none dark:bg-white"
+            className="!border-none dark:bg-neutral-50"
             style={{ opacity: isConnectable ? 1 : 0 }}
           />
         </CardContent>

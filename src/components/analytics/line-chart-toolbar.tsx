@@ -57,10 +57,7 @@ const LineChartToolbar = memo(
             setPeriod={setPeriod}
           />
         </TabsContent>
-        <TabsContent
-          value="style"
-          className="py-2 h-full overflow-hidden"
-        >
+        <TabsContent value="style" className="h-full overflow-hidden py-2">
           <StyleTab style={style} setStyle={setStyle} />
         </TabsContent>
         <TabsContent value="export" className="py-2">

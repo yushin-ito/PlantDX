@@ -23,6 +23,6 @@ body {
 
 @layer base {
   body {
-    @apply text-brand-900 dark:text-white font-medium;
+    @apply text-brand-900 dark:text-neutral-50 font-medium;
   }
 }

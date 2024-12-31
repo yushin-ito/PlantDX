@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { CheckIcon, ChevronDown, X } from "lucide-react";
@@ -11,7 +13,7 @@ const multiSelectVariants = cva("mx-1 rounded-full", {
   variants: {
     variant: {
       default:
-        "border border-neutral-200 bg-white text-neutral-950 shadow-sm hover:bg-neutral-100 dark:border-none dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700",
+        "border border-neutral-200 bg-neutral-50 text-neutral-950 shadow-sm hover:bg-neutral-100 dark:border-none dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-700",
     },
   },
   defaultVariants: {
@@ -34,12 +36,11 @@ const MultiSelect = ({
   const [labels, setLabels] = React.useState<Record<string, string>>({});
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  const toggleOption = (option: string, label: string) => {
+  const toggleOption = (option: string) => {
     const value = selected.includes(option)
       ? selected.filter((v) => v !== option)
       : [...selected, option];
     setSelected(value);
-    setLabels((prev) => ({ ...prev, [option]: label }));
     onValueChange?.(value);
   };
 
@@ -47,6 +48,7 @@ const MultiSelect = ({
     <MultiSelectContext.Provider
       value={{
         labels,
+        setLabels,
         selected,
         setSelected,
         toggleOption,
@@ -64,6 +66,7 @@ MultiSelect.displayName = "MultiSelect";
 
 type MultiSelectContextProps = {
   labels: Record<string, string>;
+  setLabels: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
   toggleOption: (value: string, label: string) => void;
@@ -134,20 +137,35 @@ MultiSelectTrigger.displayName = "MultiSelectTrigger";
 const MultiSelectContent = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
   React.ComponentPropsWithoutRef<typeof PopoverContent>
->(({ className, ...props }, ref) => (
-  <PopoverContent
-    ref={ref}
-    className={cn(
-      "max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0",
-      className
-    )}
-    {...props}
-  >
-    <Command>
-      <CommandList>{props.children}</CommandList>
-    </Command>
-  </PopoverContent>
-));
+>(({ className, ...props }, ref) => {
+  const { setLabels } = useMultiSelect();
+
+  React.useEffect(() => {
+    setLabels(
+      React.Children.toArray(props.children).reduce((acc, child) => {
+        if (React.isValidElement(child)) {
+          return { ...acc, [child.props.value]: child.props.label };
+        }
+        return acc;
+      }, {})
+    );
+  }, [props.children, setLabels]);
+
+  return (
+    <PopoverContent
+      ref={ref}
+      className={cn(
+        "max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0",
+        className
+      )}
+      {...props}
+    >
+      <Command>
+        <CommandList>{props.children}</CommandList>
+      </Command>
+    </PopoverContent>
+  );
+});
 MultiSelectContent.displayName = PopoverContent.displayName;
 
 const MultiSelectItem = React.forwardRef<

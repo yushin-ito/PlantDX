@@ -37,8 +37,8 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const edgeReconnectSuccessful = useRef(true);
 
-  const [isOpenCreateNodeModal, setIsOpenCreateNodeModal] = useState(false);
-  const [isOpenUpdateNodeModal, setIsOpenUpdateNodeModal] = useState(false);
+  const [isOpenCreateNodeSheet, setIsOpenCreateNodeSheet] = useState(false);
+  const [isOpenUpdateNodeSheet, setIsOpenUpdateNodeSheet] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -50,7 +50,6 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
 
   const sensors = useQuery(getSensors(supabase, "plantId", plantId));
 
-  // センサーデータの監視
   useSubscriptionQuery(
     supabase,
     "data",
@@ -70,7 +69,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
         <CustomNode
           isReadOnly={isReadOnly}
           onEdit={() => {
-            setIsOpenUpdateNodeModal(true);
+            setIsOpenUpdateNodeSheet(true);
             setSelectedId(Number(props.id.replace("node", "")));
           }}
           {...props}
@@ -298,7 +297,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
         {
           name: values.name,
           plantId,
-          type: values.type,
+          type: values.types,
           x: center.x,
           y: center.y,
         },
@@ -306,7 +305,7 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
 
       if (node && node.length > 0) {
         await Promise.all(
-          values.type.map(async (type) => {
+          values.types.map(async (type) => {
             if (values.sensorId[type]) {
               return await updateSensor({
                 sensorId: Number(values.sensorId[type]),
@@ -328,12 +327,12 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
         const node = await updateNode({
           nodeId: selectedId,
           name: values.name,
-          type: values.type,
+          type: values.types,
         });
 
         if (node) {
           await Promise.all(
-            values.type.map(async (type) => {
+            values.types.map(async (type) => {
               if (values.sensorId[type]) {
                 return await updateSensor({
                   sensorId: Number(values.sensorId[type]),
@@ -353,10 +352,11 @@ const FlowContainer = memo(({ plantId }: FlowContainerProps) => {
   return (
     <FlowPresenter
       reactFlowWrapper={reactFlowWrapper}
-      isOpenCreateNodeModal={isOpenCreateNodeModal}
-      setIsOpenCreateNodeModal={setIsOpenCreateNodeModal}
-      isOpenUpdateNodeModal={isOpenUpdateNodeModal}
-      setIsOpenUpdateNodeModal={setIsOpenUpdateNodeModal}
+      selectedId={selectedId}
+      isOpenCreateNodeSheet={isOpenCreateNodeSheet}
+      setIsOpenCreateNodeSheet={setIsOpenCreateNodeSheet}
+      isOpenUpdateNodeSheet={isOpenUpdateNodeSheet}
+      setIsOpenUpdateNodeSheet={setIsOpenUpdateNodeSheet}
       isReadOnly={isReadOnly}
       setIsReadOnly={setIsReadOnly}
       nodes={nodes}

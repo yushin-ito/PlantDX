@@ -1,10 +1,16 @@
-import { Power, PowerOff } from "lucide-react";
+"use client";
+
+import { Ellipsis, Power, PowerOff } from "lucide-react";
 import { cva } from "class-variance-authority";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { memo, useRef } from "react";
 
 import { Center } from "../ui/center";
 import { VStack } from "../ui/vstack";
-import { Button } from "../ui/button";
 import { ControlEvent, ControlStatus } from "@/types";
+import { Button } from "../ui/button";
+import { cn } from "@/functions/tools";
 
 const labels = {
   "on-off": {
@@ -29,63 +35,134 @@ const labels = {
   },
 };
 
-const controlButtonVariants = cva("w-40 space-y-4 rounded-xl p-4 shadow-sm", {
-  variants: {
-    variant: {
-      active: "bg-green-100 hover:bg-green-100/90",
-      inactive: "bg-red-100 hover:bg-red-100/90",
-      pending: "bg-neutral-100 hover:bg-neutral-100/90",
+const controlButtonVariants = cva(
+  "relative w-[150px] origin-center rounded-xl p-4 shadow-sm sm:w-[160px]",
+  {
+    variants: {
+      variant: {
+        active:
+          "bg-green-200 hover:bg-green-200/90 dark:bg-green-500 dark:hover:bg-green-500/90",
+        inactive:
+          "bg-red-200 hover:bg-red-200/90 dark:bg-red-500 dark:hover:bg-red-500/90",
+        pending:
+          "bg-neutral-200 hover:bg-neutral-200/90 dark:bg-neutral-800 dark:hover:bg-neutral-800/90",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "pending",
-  },
-});
+    defaultVariants: {
+      variant: "pending",
+    },
+  }
+);
 
-const controlButtonIconVariants = cva("size-9 rounded-full", {
-  variants: {
-    variant: {
-      active: "bg-green-500",
-      inactive: "bg-red-500",
-      pending: "bg-neutral-500",
+const controlButtonIconVariants = cva(
+  "size-8 rounded-full text-neutral-50 sm:size-9",
+  {
+    variants: {
+      variant: {
+        active: "bg-green-500 dark:bg-green-600",
+        inactive: "bg-red-500 dark:bg-red-600",
+        pending: "bg-neutral-500 dark:bg-neutral-900",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "pending",
-  },
-});
+    defaultVariants: {
+      variant: "pending",
+    },
+  }
+);
 
 type ControlButtonProps = {
+  controlId: number;
   name: string;
   status: ControlStatus;
   event: ControlEvent;
   onClick: () => void;
+  onOpen: () => void;
+  className?: string;
+  isDraggable?: boolean;
 };
 
-const ControlButton = ({
-  name,
-  status,
-  event,
-  onClick,
-}: ControlButtonProps) => (
-  <Button variant="unstyled" onClick={onClick}>
-    <VStack
-      className={controlButtonVariants({ variant: status })}
-      onClick={onClick}
-    >
-      <Center className={controlButtonIconVariants({ variant: status })}>
-        {status ? (
-          <Power className="size-5 text-white" />
-        ) : (
-          <PowerOff className="size-5 text-white" />
+const ControlButton = memo(
+  ({
+    controlId,
+    name,
+    status,
+    event,
+    onClick,
+    onOpen,
+    className,
+    isDraggable,
+  }: ControlButtonProps) => {
+    const controlButtonWrapper = useRef<HTMLDivElement | null>(null);
+    const {
+      isDragging,
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+    } = useSortable({ id: controlId.toString() });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition: transition,
+    };
+
+    return (
+      <div
+        ref={(node) => {
+          setNodeRef(node);
+          controlButtonWrapper.current = node;
+        }}
+        className={cn(
+          className,
+          controlButtonVariants({ variant: status }),
+          isDraggable ? "cursor-grab" : "cursor-pointer",
+          isDragging && "opacity-40"
         )}
-      </Center>
-      <VStack className="space-y-[2px]">
-        <h3 className="font-bold">{labels[event][status]}</h3>
-        <p className="text-xs text-gray-500">{name}</p>
-      </VStack>
-    </VStack>
-  </Button>
+        {...(isDraggable && attributes)}
+        {...(isDraggable && listeners)}
+        style={style}
+      >
+        <VStack
+          className="space-y-2.5 sm:space-y-4"
+          onClick={() => isDraggable && onClick()}
+          onMouseEnter={() => {
+            if (controlButtonWrapper.current) {
+              controlButtonWrapper.current.classList.add("active:scale-[0.98]");
+            }
+          }}
+          onMouseLeave={() => {
+            if (controlButtonWrapper.current) {
+              controlButtonWrapper.current.classList.remove(
+                "active:scale-[0.98]"
+              );
+            }
+          }}
+        >
+          <Center className={controlButtonIconVariants({ variant: status })}>
+            {status === "active" ? (
+              <Power className="size-[18px] sm:size-5" strokeWidth={2.5} />
+            ) : (
+              <PowerOff className="size-4 sm:size-[18px]" strokeWidth={2.5} />
+            )}
+          </Center>
+          <VStack className="ml-0.5 space-y-px sm:space-y-0.5">
+            <h3 className="text-md font-bold">{labels[event][status]}</h3>
+            <p className="text-xs text-neutral-500 dark:text-neutral-100">
+              {name}
+            </p>
+          </VStack>
+        </VStack>
+        <Button
+          variant="unstyled"
+          className="absolute right-4 top-3 size-5 rounded-full bg-neutral-50 p-0 hover:bg-neutral-100 sm:size-6"
+          onClick={onOpen}
+        >
+          <Ellipsis className="size-4 text-brand-900 sm:size-[18px]" />
+        </Button>
+      </div>
+    );
+  }
 );
 
 export default ControlButton;

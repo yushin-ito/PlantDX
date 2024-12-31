@@ -1,36 +1,57 @@
-import { PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Dispatch, memo, SetStateAction } from "react";
 import { z } from "zod";
 
 import { Button } from "../ui/button";
 import { HStack } from "../ui/hstack";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { VStack } from "../ui/vstack";
 import { Card, CardContent } from "../ui/card";
-import CreateControlModal from "./create-control.modal";
-import { CreateControlSchema } from "@/schemas";
-import { Control, ControlEvent, ControlStatus } from "@/types";
-import ControlButton from "./control-button";
-import { Center } from "../ui/center";
+import CreateControlSheet from "./create-control-sheet";
+import { CreateControlSchema, UpdateControlSchema } from "@/schemas";
+import { Control } from "@/types";
+import UpdateControlSheet from "./update-control-sheet";
+import ControlGrid from "./control-grid";
+import ControlPlaceholder from "./control-placeholder";
+import { ScrollArea } from "../ui/scroll-area";
 
 type ControlPresenterProps = {
   controls: Control["Row"][];
-  isOpenModal: boolean;
-  setIsOpenModal: Dispatch<SetStateAction<boolean>>;
-  createControlHandler: (values: z.infer<typeof CreateControlSchema>) => Promise<void>;
+  selectedId: number | null;
+  setSelectedId: Dispatch<SetStateAction<number | null>>;
+  isDraggable: boolean;
+  setIsDraggable: Dispatch<SetStateAction<boolean>>;
+  isOpenCreateControlSheet: boolean;
+  setIsOpenCreateControlSheet: Dispatch<SetStateAction<boolean>>;
+  isOpenUpdateControlSheet: boolean;
+  setIsOpenUpdateControlSheet: Dispatch<SetStateAction<boolean>>;
+  createControlHandler: (
+    values: z.infer<typeof CreateControlSchema>
+  ) => Promise<void>;
   isLoadingCreateControl: boolean;
+  updateControlHandler: (
+    values: z.infer<typeof UpdateControlSchema>
+  ) => Promise<void>;
+  isLoadingUpdateControl: boolean;
 };
 
 const ControlPresenter = memo(
   ({
     controls,
-    isOpenModal,
-    setIsOpenModal,
+    selectedId,
+    setSelectedId,
+    isDraggable,
+    setIsDraggable,
+    isOpenCreateControlSheet,
+    setIsOpenCreateControlSheet,
+    isOpenUpdateControlSheet,
+    setIsOpenUpdateControlSheet,
     createControlHandler,
     isLoadingCreateControl,
+    updateControlHandler,
+    isLoadingUpdateControl,
   }: ControlPresenterProps) => (
-    <VStack className="mt-6 w-full space-y-6 px-10">
-      <Tabs defaultValue="manual" className="space-y-6">
+    <div className="mt-6 w-full px-8 sm:px-10">
+      <Tabs defaultValue="manual" className="space-y-4">
         <HStack className="w-full items-center justify-between">
           <TabsList>
             <TabsTrigger value="manual" className="text-xs">
@@ -43,98 +64,85 @@ const ControlPresenter = memo(
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsOpenModal(true)}
+            onClick={() => setIsDraggable(!isDraggable)}
           >
-            <PlusCircle className="size-4" />
-            新規作成
+            {isDraggable ? "完了" : "並び替え"}
           </Button>
         </HStack>
         <TabsContent value="manual">
-          <Card className="border-dashed">
-            <CardContent className="h-[500px] py-4">
-              {controls.length === 0 ? (
-                <Center className="size-full">
-                  <VStack className="w-full items-center space-y-12">
-                    <VStack className="space-y-2">
-                      <h3 className="text-xl font-semibold">
-                        コントロールがありません
-                      </h3>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        下のボタンからコントロールを作成しましょう。
-                      </p>
-                    </VStack>
-                    <Button
-                      variant="brand"
-                      className="rounded-full px-16"
-                      onClick={() => setIsOpenModal(true)}
-                    >
-                      作成する
-                    </Button>
-                  </VStack>
-                </Center>
-              ) : (
-                controls
-                  .filter((control) => control.type === "manual")
-                  .map((control, index) => (
-                    <ControlButton
-                      key={index}
-                      name={control.name}
-                      status={control.status as ControlStatus}
-                      event={control.event as ControlEvent}
-                      onClick={() => {}}
-                    />
-                  ))
-              )}
+          <Card className="border-none shadow-none sm:border-dashed">
+            <CardContent className="px-0 py-4 sm:p-6">
+              <ScrollArea className="sm:h-[500px]">
+                {controls.length === 0 ? (
+                  <ControlPlaceholder
+                    onOpenCreateControlSheet={setIsOpenCreateControlSheet}
+                  />
+                ) : (
+                  <ControlGrid
+                    isDraggable={isDraggable}
+                    controls={controls.filter(
+                      (control) => control.type === "manual"
+                    )}
+                    onClickControlButton={() => {}}
+                    onOpenUpdateControlSheet={(controlId: number) => {
+                      setSelectedId(controlId);
+                      setIsOpenUpdateControlSheet(true);
+                    }}
+                  />
+                )}
+              </ScrollArea>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="auto">
-          <Card className="border-dashed">
-            <CardContent className="h-[500px] py-4">
-              {controls.length === 0 ? (
-                <Center className="size-full">
-                  <VStack className="w-full items-center space-y-12">
-                    <VStack className="space-y-2">
-                      <h3 className="text-xl font-semibold">
-                        コントロールがありません
-                      </h3>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        下のボタンからコントロールを作成しましょう。
-                      </p>
-                    </VStack>
-                    <Button
-                      variant="brand"
-                      className="rounded-full px-16"
-                      onClick={() => setIsOpenModal(true)}
-                    >
-                      作成する
-                    </Button>
-                  </VStack>
-                </Center>
-              ) : (
-                controls
-                  .filter((control) => control.type === "auto")
-                  .map((control, index) => (
-                    <ControlButton
-                      key={index}
-                      name={control.name}
-                      status={control.status as ControlStatus}
-                      event={control.event as ControlEvent}
-                      onClick={() => {}}
-                    />
-                  ))
-              )}
+          <Card className="border-none shadow-none sm:border-dashed">
+            <CardContent className="px-0 py-4 sm:p-6">
+              <ScrollArea className="sm:h-[500px]">
+                {controls.length === 0 ? (
+                  <ControlPlaceholder
+                    onOpenCreateControlSheet={setIsOpenCreateControlSheet}
+                  />
+                ) : (
+                  <ControlGrid
+                    isDraggable={isDraggable}
+                    controls={controls.filter(
+                      (control) => control.type === "auto"
+                    )}
+                    onClickControlButton={() => {}}
+                    onOpenUpdateControlSheet={(controlId: number) => {
+                      setSelectedId(controlId);
+                      setIsOpenUpdateControlSheet(true);
+                    }}
+                  />
+                )}
+              </ScrollArea>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
-      <CreateControlModal
-        isOpen={isOpenModal}
-        setIsOpen={setIsOpenModal}
+      <Button
+        variant="brand"
+        className="fixed bottom-8 right-8 z-fab size-12 rounded-full shadow-md"
+        onClick={() => setIsOpenCreateControlSheet(true)}
+      >
+        <Plus className="size-6" />
+      </Button>
+      <CreateControlSheet
+        isOpen={isOpenCreateControlSheet}
+        setIsOpen={setIsOpenCreateControlSheet}
         createControlHandler={createControlHandler}
         isLoadingCreateControl={isLoadingCreateControl}
       />
-    </VStack>
+      {selectedId && (
+        <UpdateControlSheet
+          controlId={selectedId}
+          isOpen={isOpenUpdateControlSheet}
+          setIsOpen={setIsOpenUpdateControlSheet}
+          updateControlHandler={updateControlHandler}
+          isLoadingUpdateControl={isLoadingUpdateControl}
+        />
+      )}
+    </div>
   )
 );
 

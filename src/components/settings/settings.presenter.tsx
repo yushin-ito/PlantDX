@@ -21,7 +21,7 @@ const SettingsPresenter = memo(
     updatePlantHandler,
     isLoadingUpdatePlant,
   }: SettingsPresenterProps) => (
-    <VStack className="mt-4 w-full space-y-6 px-10">
+    <VStack className="mt-4 w-full space-y-6 px-8 sm:px-10">
       <Tabs defaultValue="plant" variant="outline">
         <TabsList className="w-full">
           <TabsTrigger value="plant">プラント</TabsTrigger>

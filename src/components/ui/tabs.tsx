@@ -74,7 +74,7 @@ const tabsTriggerVariants = cva(
     variants: {
       variant: {
         default:
-          "rounded-md px-3 py-1.5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-neutral-950 data-[state=active]:shadow dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300 dark:data-[state=active]:bg-neutral-950 dark:data-[state=active]:text-neutral-50",
+          "rounded-md px-3 py-1.5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:opacity-50 data-[state=active]:bg-neutral-50 data-[state=active]:text-neutral-950 data-[state=active]:shadow dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300 dark:data-[state=active]:bg-neutral-950 dark:data-[state=active]:text-neutral-50",
         outline:
           "z-10 w-24 px-2 py-2.5 after:absolute after:bottom-0 after:h-[2px] after:w-24 after:rounded-full after:text-transparent after:content-['border'] first-of-type:ml-0 data-[state=active]:text-brand-600 data-[state=active]:after:bg-brand-600 data-[state=inactive]:after:bg-transparent",
       },

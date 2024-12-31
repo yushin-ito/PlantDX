@@ -16,15 +16,15 @@ import {
 } from "@tanstack/react-table";
 
 import { createBrowserClient } from "@/functions/browser";
-import { getActions } from "@/functions/query";
-import ActionsPresenter from "./actions.presenter";
+import { getHistories } from "@/functions/query";
+import HistoryPresenter from "./history.presenter";
 import TableColumns from "./table-column";
 
-type ActionsContainerProps = {
+type HistoryContainerProps = {
   plantId: number;
 };
 
-const ActionsContainer = memo(({ plantId }: ActionsContainerProps) => {
+const HistoryContainer = memo(({ plantId }: HistoryContainerProps) => {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -35,15 +35,15 @@ const ActionsContainer = memo(({ plantId }: ActionsContainerProps) => {
   });
 
   const supabase = createBrowserClient();
-  const actions = useInfiniteOffsetPaginationQuery(
-    getActions(supabase, "plantId", plantId).order("createdAt", {
+  const history = useInfiniteOffsetPaginationQuery(
+    getHistories(supabase, "plantId", plantId).order("createdAt", {
       ascending: !sorting[0]?.desc,
     }),
     { pageSize: pagination.pageSize }
   );
 
   const table = useReactTable({
-    data: actions.currentPage || [],
+    data: history.currentPage || [],
     columns: TableColumns,
     state: {
       sorting,
@@ -52,9 +52,8 @@ const ActionsContainer = memo(({ plantId }: ActionsContainerProps) => {
       columnFilters,
       pagination,
     },
+    manualPagination: true,
     autoResetPageIndex: false,
-    autoResetExpanded: false,
-    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -69,14 +68,16 @@ const ActionsContainer = memo(({ plantId }: ActionsContainerProps) => {
   });
 
   return (
-    <ActionsPresenter
+    <HistoryPresenter
       table={table}
-      pageIndex={actions.pageIndex}
-      nextPage={actions.nextPage}
-      previousPage={actions.previousPage}
-      isLoadingPage={actions.isValidating}
+      pageIndex={history.pageIndex}
+      hasNextPage={!!history.nextPage}
+      hasPreviousPage={!!history.previousPage}
+      nextPage={history.nextPage || (() => {})}
+      previousPage={history.previousPage || (() => {})}
+      isLoadingPage={history.isValidating}
     />
   );
 });
 
-export default ActionsContainer;
+export default HistoryContainer;

@@ -28,12 +28,12 @@ const TableToolbar = <TData,>({ table }: TableToolbarProps<TData>) => {
             <Input
               placeholder="ログを検索する"
               value={
-                (table.getColumn("title")?.getFilterValue() as string) ?? ""
+                (table.getColumn("content")?.getFilterValue() as string) ?? ""
               }
               onChange={(event) =>
-                table.getColumn("title")?.setFilterValue(event.target.value)
+                table.getColumn("content")?.setFilterValue(event.target.value)
               }
-              className="flex h-8 w-[200px] border-none px-0 placeholder:text-xs"
+              className="h-8 w-[200px] border-none px-0 shadow-none placeholder:text-xs"
             />
           </HStack>
         </CardContent>

@@ -1,7 +1,8 @@
 import { Clock, GitCommitHorizontal } from "lucide-react";
+import { memo } from "react";
+
 import { HStack } from "../ui/hstack";
 import { VStack } from "../ui/vstack";
-import { memo } from "react";
 
 type CustomTooltipProps = {
   name: string;

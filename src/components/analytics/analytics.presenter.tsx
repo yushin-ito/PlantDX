@@ -54,7 +54,7 @@ const AnalyticsPresenter = memo(
     const sensor = sensors.find((sensor) => sensor.sensorId === sensorId);
 
     return (
-      <HStack className="my-6 space-x-6 px-10">
+      <HStack className="my-6 space-x-6 px-8 sm:px-10">
         <VStack className="h-[600px] w-full items-center space-y-6">
           <Card className="size-full">
             <CardHeader>

@@ -34,75 +34,11 @@ export type Database = {
   }
   public: {
     Tables: {
-      action: {
-        Row: {
-          actionId: number
-          command: string
-          controlId: number | null
-          count: number | null
-          createdAt: string
-          deviceId: string
-          plantId: number
-          sensorId: number | null
-          updatedAt: string
-        }
-        Insert: {
-          actionId?: number
-          command: string
-          controlId?: number | null
-          count?: number | null
-          createdAt?: string
-          deviceId: string
-          plantId: number
-          sensorId?: number | null
-          updatedAt?: string
-        }
-        Update: {
-          actionId?: number
-          command?: string
-          controlId?: number | null
-          count?: number | null
-          createdAt?: string
-          deviceId?: string
-          plantId?: number
-          sensorId?: number | null
-          updatedAt?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "action_controlId_fkey"
-            columns: ["controlId"]
-            isOneToOne: false
-            referencedRelation: "control"
-            referencedColumns: ["controlId"]
-          },
-          {
-            foreignKeyName: "action_deviceId_fkey"
-            columns: ["deviceId"]
-            isOneToOne: false
-            referencedRelation: "device"
-            referencedColumns: ["deviceId"]
-          },
-          {
-            foreignKeyName: "action_plantId_fkey"
-            columns: ["plantId"]
-            isOneToOne: false
-            referencedRelation: "plant"
-            referencedColumns: ["plantId"]
-          },
-          {
-            foreignKeyName: "action_sensorId_fkey"
-            columns: ["sensorId"]
-            isOneToOne: false
-            referencedRelation: "sensor"
-            referencedColumns: ["sensorId"]
-          },
-        ]
-      }
       control: {
         Row: {
-          commad: string
+          command: string
           controlId: number
+          count: number
           createdAt: string
           event: string
           name: string
@@ -112,8 +48,9 @@ export type Database = {
           updatedAt: string
         }
         Insert: {
-          commad: string
+          command: string
           controlId?: number
+          count?: number
           createdAt?: string
           event: string
           name: string
@@ -123,8 +60,9 @@ export type Database = {
           updatedAt?: string
         }
         Update: {
-          commad?: string
+          command?: string
           controlId?: number
+          count?: number
           createdAt?: string
           event?: string
           name?: string
@@ -216,6 +154,54 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "node"
             referencedColumns: ["nodeId"]
+          },
+        ]
+      }
+      history: {
+        Row: {
+          command: string
+          content: string
+          createdAt: string
+          historyId: number
+          plantId: number
+          status: string
+          updatedAt: string
+          userId: string
+        }
+        Insert: {
+          command: string
+          content: string
+          createdAt?: string
+          historyId?: number
+          plantId: number
+          status: string
+          updatedAt?: string
+          userId?: string
+        }
+        Update: {
+          command?: string
+          content?: string
+          createdAt?: string
+          historyId?: number
+          plantId?: number
+          status?: string
+          updatedAt?: string
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "action_plantId_fkey"
+            columns: ["plantId"]
+            isOneToOne: false
+            referencedRelation: "plant"
+            referencedColumns: ["plantId"]
+          },
+          {
+            foreignKeyName: "history_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["userId"]
           },
         ]
       }

@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { memo, RefObject, useCallback, useMemo } from "react";
 import { addSeconds, differenceInSeconds, format, parseISO } from "date-fns";
-import { Clock, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import {
   ChartConfig,
@@ -18,7 +18,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { VStack } from "../ui/vstack";
 import { HStack } from "../ui/hstack";
 import { Center } from "../ui/center";
 import CustomTraveller from "./custom-traveller";
@@ -171,7 +170,7 @@ const LineChart = memo(
                     />
                   );
                 }}
-                className="rounded-md bg-white shadow-sm dark:bg-neutral-800"
+                className="rounded-md bg-neutral-50 shadow-sm dark:bg-neutral-800"
               />
             }
           />

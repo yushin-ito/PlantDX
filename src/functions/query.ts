@@ -9,7 +9,7 @@ import {
   Plant,
   Sensor,
   Record,
-  Action,
+  History,
 } from "@/types";
 import { Database } from "@/types/schema";
 
@@ -59,11 +59,16 @@ export const getRecords = <Column extends keyof Record["Row"]>(
   value: Exclude<Record["Row"][Column], null>
 ) => supabase.from("record").select().eq(column, value).throwOnError();
 
-export const getActions = <Column extends keyof Action["Row"]>(
+export const getHistories = <Column extends keyof History["Row"]>(
   supabase: SupabaseClient<Database>,
   column: Column,
-  value: Exclude<Action["Row"][Column], null>
-) => supabase.from("action").select().eq(column, value).throwOnError();
+  value: Exclude<History["Row"][Column], null>
+) =>
+  supabase
+    .from("history")
+    .select("*, user:user(*)")
+    .eq(column, value)
+    .throwOnError();
 
 export const getDevices = <Column extends keyof Device["Row"]>(
   supabase: SupabaseClient<Database>,

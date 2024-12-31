@@ -1,3 +1,5 @@
+import { AnimationTiming } from "recharts/types/util/types";
+
 import {
   PLANT_TEMPLATE,
   SENSOR_TYPE,
@@ -9,7 +11,6 @@ import {
   FILE_TYPE,
 } from "@/constants";
 import { Database } from "./schema";
-import { AnimationTiming } from "recharts/types/util/types";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta {
@@ -30,7 +31,7 @@ export type FileType = (typeof FILE_TYPE)[number];
 export type Control = Database["public"]["Tables"]["control"];
 export type Device = Database["public"]["Tables"]["device"];
 export type Edge = Database["public"]["Tables"]["edge"];
-export type Action = Database["public"]["Tables"]["action"];
+export type History = Database["public"]["Tables"]["history"];
 export type Member = Database["public"]["Tables"]["member"];
 export type Record = Database["public"]["Tables"]["record"];
 export type Node = Database["public"]["Tables"]["node"];
@@ -39,7 +40,7 @@ export type Sensor = Database["public"]["Tables"]["sensor"];
 export type User = Database["public"]["Tables"]["user"];
 
 type LineChartStyle = {
-  type: "linear" | "monotone" | "scatter"
+  type: "linear" | "monotone" | "scatter";
 };
 
 type XAxisStyle = {

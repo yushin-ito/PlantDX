@@ -15,27 +15,31 @@ import { VStack } from "../ui/vstack";
 import TableColumns from "./table-column";
 import TablePagination from "./table-pagination";
 import TableToolbar from "./table-toolbar";
-import { Action } from "@/types";
+import { History, User } from "@/types";
 import { HStack } from "../ui/hstack";
 
-type ActionsPresenterProps = {
-  table: TableData<Action["Row"]>;
+type HistoryPresenterProps = {
+  table: TableData<History["Row"] & { user: User["Row"] | null }>;
   pageIndex: number;
-  nextPage: (() => void) | null;
-  previousPage: (() => void) | null;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  nextPage: () => void;
+  previousPage: () => void;
   isLoadingPage: boolean;
 };
 
-const ActionsPresenter = memo(
+const HistoryPresenter = memo(
   ({
     table,
     pageIndex,
+    hasNextPage,
+    hasPreviousPage,
     nextPage,
     previousPage,
     isLoadingPage,
-  }: ActionsPresenterProps) => {
+  }: HistoryPresenterProps) => {
     return (
-      <VStack className="mt-6 w-full space-y-4 px-10">
+      <VStack className="mt-6 w-full space-y-4 px-8 sm:px-10">
         <TableToolbar table={table} />
         <Card>
           <CardContent className="p-0">
@@ -73,7 +77,10 @@ const ActionsPresenter = memo(
                       data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
+                        <TableCell
+                          key={cell.id}
+                          className="border-b text-brand-900 dark:text-neutral-50"
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -99,6 +106,8 @@ const ActionsPresenter = memo(
         <TablePagination
           table={table}
           pageIndex={pageIndex}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
           nextPage={nextPage}
           previousPage={previousPage}
         />
@@ -107,4 +116,4 @@ const ActionsPresenter = memo(
   }
 );
 
-export default ActionsPresenter;
+export default HistoryPresenter;

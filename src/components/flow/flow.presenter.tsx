@@ -1,8 +1,8 @@
 import { Dispatch, memo, RefObject, SetStateAction } from "react";
 import {
   ReactFlow,
-  Edge,
-  Node,
+  Edge as EdgeType,
+  Node as NodeType,
   OnConnect,
   NodeDragHandler,
   OnEdgeUpdateFunc,
@@ -18,21 +18,22 @@ import { Button } from "../ui/button";
 import CustomConnectionLine from "./custom-connection-line";
 import CustomControls from "./custom-controls";
 import { CreateNodeSchema, UpdateNodeSchema } from "@/schemas";
-import CreateNodeModal from "./create-node.modal";
-import UpdateNodeModal from "./update-node.modal";
+import CreateNodeSheet from "./create-node-sheet";
+import UpdateNodeSheet from "./update-node-sheet";
 
 import "reactflow/dist/style.css";
 
 type FlowPresenterProps = {
   reactFlowWrapper: RefObject<HTMLDivElement>;
-  isOpenCreateNodeModal: boolean;
-  setIsOpenCreateNodeModal: Dispatch<SetStateAction<boolean>>;
-  isOpenUpdateNodeModal: boolean;
-  setIsOpenUpdateNodeModal: Dispatch<SetStateAction<boolean>>;
+  selectedId: number | null;
+  isOpenCreateNodeSheet: boolean;
+  setIsOpenCreateNodeSheet: Dispatch<SetStateAction<boolean>>;
+  isOpenUpdateNodeSheet: boolean;
+  setIsOpenUpdateNodeSheet: Dispatch<SetStateAction<boolean>>;
   isReadOnly: boolean;
   setIsReadOnly: Dispatch<SetStateAction<boolean>>;
-  nodes: Node[];
-  edges: Edge[];
+  nodes: NodeType[];
+  edges: EdgeType[];
   nodeTypes: NodeTypes;
   edgeTypes: EdgeTypes;
   onNodesChange: (changes: NodeChange[]) => void;
@@ -40,7 +41,7 @@ type FlowPresenterProps = {
   onConnect: OnConnect;
   onReconnectStart: () => void;
   onReconnect: OnEdgeUpdateFunc;
-  onReconnectEnd: (event: MouseEvent | TouchEvent, edge: Edge) => void;
+  onReconnectEnd: (event: MouseEvent | TouchEvent, edge: EdgeType) => void;
   onNodeDragStop: NodeDragHandler;
   createNodeHandler: (
     values: z.infer<typeof CreateNodeSchema>
@@ -55,10 +56,11 @@ type FlowPresenterProps = {
 const FlowPresenter = memo(
   ({
     reactFlowWrapper,
-    isOpenCreateNodeModal,
-    setIsOpenCreateNodeModal,
-    isOpenUpdateNodeModal,
-    setIsOpenUpdateNodeModal,
+    selectedId,
+    isOpenCreateNodeSheet,
+    setIsOpenCreateNodeSheet,
+    isOpenUpdateNodeSheet,
+    setIsOpenUpdateNodeSheet,
     isReadOnly,
     setIsReadOnly,
     nodes,
@@ -96,30 +98,29 @@ const FlowPresenter = memo(
         onNodeDragStop={onNodeDragStop}
         connectionLineComponent={CustomConnectionLine}
       >
-        <CustomControls
-          isReadOnly={isReadOnly}
-          setIsReadOnly={setIsReadOnly}
-        />
+        <CustomControls isReadOnly={isReadOnly} setIsReadOnly={setIsReadOnly} />
       </ReactFlow>
       <Button
         variant="brand"
-        className="absolute bottom-8 right-8 z-fab size-12 rounded-full shadow-md"
-        onClick={() => setIsOpenCreateNodeModal(true)}
+        className="fixed bottom-8 right-8 z-fab size-12 rounded-full shadow-md"
+        onClick={() => setIsOpenCreateNodeSheet(true)}
       >
         <Plus className="size-6" />
       </Button>
-      <CreateNodeModal
-        isOpen={isOpenCreateNodeModal}
-        setIsOpen={setIsOpenCreateNodeModal}
+      <CreateNodeSheet
+        isOpen={isOpenCreateNodeSheet}
+        setIsOpen={setIsOpenCreateNodeSheet}
         createNodeHandler={createNodeHandler}
         isLoadingCreateNode={isLoadingCreateNode}
       />
-      <UpdateNodeModal
-        isOpen={isOpenUpdateNodeModal}
-        setIsOpen={setIsOpenUpdateNodeModal}
+      {selectedId &&
+      <UpdateNodeSheet
+        nodeId={selectedId}
+        isOpen={isOpenUpdateNodeSheet}
+        setIsOpen={setIsOpenUpdateNodeSheet}
         updateNodeHandler={updateNodeHandler}
         isLoadingUpdateNode={isLoadingUpdateNode}
-      />
+      />}
     </div>
   )
 );
