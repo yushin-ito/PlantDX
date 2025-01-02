@@ -95,7 +95,7 @@ const CreateControlSheet = memo(
                   form.reset();
                 }}
                 error={error}
-                isLoading={isLoadingCreateControl}
+                isMutating={isLoadingCreateControl}
               />
             </VStack>
           </DrawerContent>
@@ -127,7 +127,7 @@ const CreateControlSheet = memo(
                 form.reset();
               }}
               error={error}
-              isLoading={isLoadingCreateControl}
+              isMutating={isLoadingCreateControl}
             />
           </VStack>
         </DialogContent>

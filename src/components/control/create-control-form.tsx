@@ -30,11 +30,11 @@ type CreateControlFormProps = {
   onSubmit: (values: z.infer<typeof CreateControlSchema>) => void;
   onCancel: () => void;
   error: string;
-  isLoading: boolean;
+  isMutating: boolean;
 };
 
 const CreateControlForm = memo(
-  ({ form, onSubmit, onCancel, error, isLoading }: CreateControlFormProps) => (
+  ({ form, onSubmit, onCancel, error, isMutating }: CreateControlFormProps) => (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ScrollArea className="h-[240px] pl-2 pr-4">
@@ -132,7 +132,7 @@ const CreateControlForm = memo(
             キャンセル
           </Button>
           <Button type="submit" variant="brand">
-            {isLoading && <Loader2 className="size-5 animate-spin" />}
+            {isMutating && <Loader2 className="size-5 animate-spin" />}
             <span>作成する</span>
           </Button>
         </HStack>

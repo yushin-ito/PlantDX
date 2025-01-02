@@ -37,11 +37,11 @@ type UpdateNodeFormProps = {
   onSubmit: (values: z.infer<typeof UpdateNodeSchema>) => void;
   onCancel: () => void;
   error: string;
-  isLoading: boolean;
+  isMutating: boolean;
 };
 
 const UpdateNodeForm = memo(
-  ({ form, onSubmit, onCancel, error, isLoading }: UpdateNodeFormProps) => (
+  ({ form, onSubmit, onCancel, error, isMutating }: UpdateNodeFormProps) => (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ScrollArea className="h-[240px] pl-2 pr-4">
@@ -110,7 +110,7 @@ const UpdateNodeForm = memo(
             キャンセル
           </Button>
           <Button type="submit" variant="brand">
-            {isLoading && <Loader2 className="size-5 animate-spin" />}
+            {isMutating && <Loader2 className="size-5 animate-spin" />}
             <span>作成する</span>
           </Button>
         </HStack>

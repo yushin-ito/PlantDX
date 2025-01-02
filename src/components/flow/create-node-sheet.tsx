@@ -122,7 +122,7 @@ const CreateNodeSheet = memo(
                 onSubmit={onSubmit}
                 onCancel={() => setIsOpen(false)}
                 error={error}
-                isLoading={isLoadingCreateNode}
+                isMutating={isLoadingCreateNode}
               />
             </VStack>
           </DrawerContent>
@@ -151,7 +151,7 @@ const CreateNodeSheet = memo(
               onSubmit={onSubmit}
               onCancel={() => setIsOpen(false)}
               error={error}
-              isLoading={isLoadingCreateNode}
+              isMutating={isLoadingCreateNode}
             />
           </VStack>
         </DialogContent>

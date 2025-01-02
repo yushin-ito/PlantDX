@@ -117,7 +117,8 @@ const UpdateControlSheet = memo(
                   form.reset();
                 }}
                 error={error}
-                isLoading={isLoadingUpdateControl}
+                isLoading={controls.isLoading}
+                isMutating={isLoadingUpdateControl}
               />
             </VStack>
           </DrawerContent>
@@ -149,7 +150,8 @@ const UpdateControlSheet = memo(
                 form.reset();
               }}
               error={error}
-              isLoading={isLoadingUpdateControl}
+              isLoading={controls.isLoading}
+              isMutating={isLoadingUpdateControl}
             />
           </VStack>
         </DialogContent>

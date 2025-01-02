@@ -162,6 +162,14 @@ const UpdateNodeSheet = memo(
                 </DrawerDescription>
               </DrawerHeader>
             </VStack>
+
+            <UpdateNodeForm
+              form={form}
+              onSubmit={onSubmit}
+              onCancel={() => setIsOpen(false)}
+              error={error}
+              isMutating={isLoadingUpdateNode}
+            />
           </DrawerContent>
         </Drawer>
       );
@@ -189,7 +197,7 @@ const UpdateNodeSheet = memo(
               onSubmit={onSubmit}
               onCancel={() => setIsOpen(false)}
               error={error}
-              isLoading={isLoadingUpdateNode}
+              isMutating={isLoadingUpdateNode}
             />
           </VStack>
         </DialogContent>
