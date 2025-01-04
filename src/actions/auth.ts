@@ -24,10 +24,9 @@ export const signUp = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: process.env.NEXT_PUBLIC_APP_URL,
-      },
     });
+
+    console.log(data, error);
 
     if (error) {
       throw error;
@@ -71,5 +70,25 @@ export const signOut = async () => {
     return { error };
   } catch (error) {
     return { error };
+  }
+};
+
+export const verifyOtp = async (email: string, token: string) => {
+  try {
+    const supabase = await createServerClient();
+
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: "email",
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return { data, error };
+  } catch (error) {
+    return { data: null, error };
   }
 };

@@ -42,6 +42,17 @@ export const LogInSchema = z.object({
     }),
 });
 
+export const VerifyOTPSchema = z.object({
+  token: z
+    .string()
+    .min(6, {
+      message: "6桁で入力してください",
+    })
+    .regex(/^\d+$/, {
+      message: "数字のみで入力してください",
+    }),
+});
+
 export const CreatePlantSchema = z.object({
   name: z
     .string()
@@ -50,7 +61,7 @@ export const CreatePlantSchema = z.object({
   deviceId: z
     .string()
     .min(1, { message: "デバイス番号を入力してください" })
-    .length(8, { message: "8文字で入力してください" })
+    .length(8, { message: "8桁で入力してください" })
     .regex(/^\d+$/, { message: "数字のみで入力してください" }),
   template: z.enum(PLANT_TEMPLATE),
 });
@@ -135,7 +146,7 @@ export const UpdatePlantSchema = z.object({
   deviceId: z
     .string()
     .min(1, { message: "デバイス番号を入力してください" })
-    .length(8, { message: "8文字で入力してください" })
+    .length(8, { message: "8桁で入力してください" })
     .regex(/^\d+$/, { message: "数字のみで入力してください" }),
 });
 
