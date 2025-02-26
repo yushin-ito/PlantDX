@@ -17,7 +17,7 @@ const CustomControls = memo(
     const { zoomIn, zoomOut, fitView } = useReactFlow();
 
     return (
-      <VStack className="absolute bottom-5 left-5 z-controls rounded-md bg-neutral-50 shadow-md dark:bg-neutral-800">
+      <VStack className="absolute bottom-5 left-5 z-controls rounded-md bg-white shadow-md dark:bg-neutral-800">
         <Button
           variant="ghost"
           className="size-7 rounded-sm"

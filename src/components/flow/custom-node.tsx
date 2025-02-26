@@ -87,15 +87,15 @@ const CustomNode = memo(
             {data.type.includes("pressure") &&
               typeof data.value.pressure === "number" && (
                 <HStack className="items-center space-x-2">
-                  <div className="relative h-1 w-36 rounded-full bg-green-100">
+                  <div className="relative h-1 w-36 rounded-full bg-green-200">
                     <div
-                      className="absolute left-0 top-0 h-1 rounded-full bg-green-500"
+                      className="absolute left-0 top-0 h-1 rounded-full bg-green-600"
                       style={{
-                        width: `${(data.value.pressure / 100) * 96}px`,
+                        width: `${(data.value.pressure / 5) * 96}px`,
                       }}
                     />
                   </div>
-                  <Center className="h-4 w-8 rounded-full border-[1.2px] border-green-500 bg-green-100 text-[8px] text-green-500 dark:border-none dark:bg-green-500 dark:text-neutral-50">
+                  <Center className="h-4 w-8 rounded-full border-[1.2px] border-green-600 bg-green-100 text-[8px] text-green-600 dark:border-none dark:bg-green-600 dark:text-neutral-50">
                     {data.value.pressure}hPa
                   </Center>
                 </HStack>

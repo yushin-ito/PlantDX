@@ -113,14 +113,15 @@ const FlowPresenter = memo(
         createNodeHandler={createNodeHandler}
         isLoadingCreateNode={isLoadingCreateNode}
       />
-      {selectedId &&
-      <UpdateNodeSheet
-        nodeId={selectedId}
-        isOpen={isOpenUpdateNodeSheet}
-        setIsOpen={setIsOpenUpdateNodeSheet}
-        updateNodeHandler={updateNodeHandler}
-        isLoadingUpdateNode={isLoadingUpdateNode}
-      />}
+      {selectedId && (
+        <UpdateNodeSheet
+          nodeId={selectedId}
+          isOpen={isOpenUpdateNodeSheet}
+          setIsOpen={setIsOpenUpdateNodeSheet}
+          updateNodeHandler={updateNodeHandler}
+          isLoadingUpdateNode={isLoadingUpdateNode}
+        />
+      )}
     </div>
   )
 );

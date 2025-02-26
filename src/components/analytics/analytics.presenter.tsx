@@ -55,7 +55,7 @@ const AnalyticsPresenter = memo(
 
     return (
       <HStack className="my-6 space-x-6 px-8 sm:px-10">
-        <VStack className="h-[600px] w-full items-center space-y-6">
+        <VStack className="h-[650px] w-full items-center space-y-6 overflow-hidden">
           <Card className="size-full">
             <CardHeader>
               <HStack className="items-center justify-between">
@@ -103,7 +103,7 @@ const AnalyticsPresenter = memo(
             </CardContent>
           </Card>
         </VStack>
-        <Card className="h-[600px] w-[450px]">
+        <Card className="h-[650px] w-[400px]">
           <CardContent className="size-full p-4">
             <LineChartToolbar
               date={date}

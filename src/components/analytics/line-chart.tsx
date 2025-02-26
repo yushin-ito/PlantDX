@@ -184,7 +184,7 @@ const LineChart = memo(
             traveller={(props) => <CustomTraveller {...props} />}
             stroke="transparent"
             fill="transparent"
-            className="[&_.recharts-brush-slide]:fill-opacity-20 [&_.recharts-brush-slide]:fill-neutral-400 dark:[&_.recharts-brush-slide]:fill-neutral-200"
+            className="[&_.recharts-brush-slide]:fill-neutral-400 dark:[&_.recharts-brush-slide]:fill-neutral-200"
           >
             <LineReChart data={data}>
               <Line

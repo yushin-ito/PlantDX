@@ -17,7 +17,7 @@ import { CreatePlantSchema } from "@/schemas";
 import { VStack } from "./ui/vstack";
 import { getDevices } from "@/functions/query";
 import { createBrowserClient } from "@/functions/browser";
-import CreatePlantForm from "./create-node-form";
+import CreatePlantForm from "./create-plant-form";
 import {
   Drawer,
   DrawerContent,

@@ -31,7 +31,7 @@ const HistoryContainer = memo(({ plantId }: HistoryContainerProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 8,
+    pageSize: 12,
   });
 
   const supabase = createBrowserClient();

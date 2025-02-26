@@ -41,7 +41,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
     <body
       className={`${[inter, noto_sans_jp].map((f) => f.variable).join(" ")}`}
     >
-      <main className="h-full w-screen bg-neutral-50 dark:bg-neutral-950">
+      <main className="h-full w-screen bg-white dark:bg-neutral-950">
         <SWRConfigProvider>
           <ToastProvider>
             <ThemeProvider
