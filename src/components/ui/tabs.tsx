@@ -125,11 +125,10 @@ const tabsTriggerVariants = cva(
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => {
+>(({  className, ...props }, ref) => {
   const { currentValue, variant } = useTabsContext();
 
-  const checked =
-    variant === "stepper" && Number(props.value) < Number(currentValue);
+  const checked = variant === "stepper" && Number(props.value) < Number(currentValue);
 
   return (
     <TabsPrimitive.Trigger
@@ -137,7 +136,7 @@ const TabsTrigger = React.forwardRef<
       className={cn(
         tabsTriggerVariants({ variant }),
         className,
-        checked && "!bg-brand-600"
+        (checked || props.value === currentValue) && "!bg-brand-600 text-white"
       )}
       {...props}
     >

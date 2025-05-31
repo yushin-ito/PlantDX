@@ -154,3 +154,8 @@ export const ExportSchema = z.object({
   name: z.string().min(1, { message: "ファイル名を入力してください" }),
   type: z.enum(FILE_TYPE),
 });
+
+export const CreateUserSchema = z.object({
+  name: z.string().min(1, { message: "ユーザー名を入力してください" }),
+  color: z.string().min(1, { message: "色を選択してください" }),
+});

@@ -1,5 +1,16 @@
-import Walkthrough from "@/components/walkthrough/walkthrough";
+import { redirect } from "next/navigation";
 
-const WalkthroughPage = () => <Walkthrough />;
+import { getAuth } from "@/actions/auth";
+import WalkthroughContainer from "@/components/walkthrough/walkthrough.container";
+
+const WalkthroughPage = async () => {
+  const { data, error } = await getAuth();
+
+  if (error || !data) {
+    redirect("/login");
+  }
+
+  return <WalkthroughContainer userId={data.user.id} />;
+};
 
 export default WalkthroughPage;
