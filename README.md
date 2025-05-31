@@ -117,8 +117,8 @@
 <br>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/7a60c415-7473-4a70-a5d2-515146caccbb" alt="area"/>
-  <img src="https://github.com/user-attachments/assets/e0e186e4-4ec0-48b1-b57a-9eae35745fed" alt="volume" />
+  <img src="https://github.com/user-attachments/assets/7a60c415-7473-4a70-a5d2-515146caccbb" alt="area" width="240px"/>
+  <img src="https://github.com/user-attachments/assets/e0e186e4-4ec0-48b1-b57a-9eae35745fed" alt="volume" width="240px"/>
 </div>
 
 <br>
@@ -155,7 +155,7 @@ ATLANA では、画像から得られる情報をもとに<strong>攪拌率</str
 <strong>フロー画面</strong>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/207f2610-c8bf-4839-8c24-468f175d6471" alt="flow"/>
+  <img src="https://github.com/user-attachments/assets/207f2610-c8bf-4839-8c24-468f175d6471" alt="flow" width="480px" />
 </div>
 
 <br>
@@ -163,7 +163,7 @@ ATLANA では、画像から得られる情報をもとに<strong>攪拌率</str
 <strong>分析画面</strong>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/bf0cdc81-4c71-48a9-8728-3c6fad35f080" alt="analytics"/>
+  <img src="https://github.com/user-attachments/assets/bf0cdc81-4c71-48a9-8728-3c6fad35f080" alt="analytics" width="480px" />
 </div>
 
 <br>
@@ -171,7 +171,7 @@ ATLANA では、画像から得られる情報をもとに<strong>攪拌率</str
 <strong>制御画面</strong>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/18025f52-8740-4315-8536-e586f2668afb" alt="control"/>
+  <img src="https://github.com/user-attachments/assets/18025f52-8740-4315-8536-e586f2668afb" alt="control" width="480px" />
 </div>
 
 <br>
@@ -179,7 +179,7 @@ ATLANA では、画像から得られる情報をもとに<strong>攪拌率</str
 <strong>ログ画面</strong>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/f0572643-b0b7-4f8a-83b1-10a3d3810cbb" alt="log"/>
+  <img src="https://github.com/user-attachments/assets/f0572643-b0b7-4f8a-83b1-10a3d3810cbb" alt="log" width="480px" />
 </div>
 
 <br>
