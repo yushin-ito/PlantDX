@@ -1,8 +1,8 @@
 # PlantDX
 
 ![version](https://img.shields.io/badge/version-1.0.0-red.svg)
-![stars](https://img.shields.io/github/stars/yushin-ito/plantDX?color=yellow)
-![commit-activity](https://img.shields.io/github/commit-activity/t/yushin-ito/plantDX)
+![stars](https://img.shields.io/github/stars/yushin-ito/plantdx?color=yellow)
+![commit-activity](https://img.shields.io/github/commit-activity/t/yushin-ito/plantdx)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
 <br>
@@ -105,26 +105,32 @@ ATLANA では、画像から得られる情報をもとに**攪拌率**を定義
 
 **フロー画面**
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/207f2610-c8bf-4839-8c24-468f175d6471" alt="flow" width="640px" />
-</div>
+センサーデータをリアルタイムで表示する画面です。
+
+<img src="https://github.com/user-attachments/assets/207f2610-c8bf-4839-8c24-468f175d6471" />
 
 **分析画面**
 
+過去のセンサーデータを時系列で可視化する画面です。
+
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/bf0cdc81-4c71-48a9-8728-3c6fad35f080" alt="analytics" width="640px" />
+  <img src="https://github.com/user-attachments/assets/bf0cdc81-4c71-48a9-8728-3c6fad35f080" alt="analytics" />
 </div>
 
 **制御画面**
 
+アクチュエータをリモートで制御する画面です。
+
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/18025f52-8740-4315-8536-e586f2668afb" alt="control" width="640px" />
+  <img src="https://github.com/user-attachments/assets/18025f52-8740-4315-8536-e586f2668afb" alt="control" />
 </div>
 
 **ログ画面**
 
+アクチュエータの制御に関するログを記録して表示する画面です。
+
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/f0572643-b0b7-4f8a-83b1-10a3d3810cbb" alt="log" width="640px" />
+  <img src="https://github.com/user-attachments/assets/f0572643-b0b7-4f8a-83b1-10a3d3810cbb" alt="log" />
 </div>
 
 <br>
@@ -169,7 +175,27 @@ ATLANA では、画像から得られる情報をもとに**攪拌率**を定義
 
 <br>
 
-## 👀 Author
+## ⚡️ Structure
+
+```
+plantdx/
+├── public/             # アセット
+├── src/
+│   ├── actions/        # サーバーアクション
+│   ├── app/            # ページ
+│   ├── components/     # コンポーネント
+│   ├── constants/      # 定数
+│   ├── functions/      # ユーティリティ
+│   ├── hooks/          # カスタムフック
+│   ├── schemas/        # スキーマ
+│   ├── styles/         # スタイル
+│   └── types/          # 型定義
+└── supabase/           # Supabase
+```
+
+<br>
+
+## 🤝 Contributer
 
 <a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
 <a href="https://github.com/walterairs"><img  src="https://avatars.githubusercontent.com/u/98316678?s=48&v=4" width="64px"></a>
