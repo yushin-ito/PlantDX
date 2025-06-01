@@ -15,31 +15,6 @@
 
 <br>
 
-<h2>👀 Author</h2>
-<a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
-<a href="https://github.com/walterairs"><img  src="https://avatars.githubusercontent.com/u/98316678?s=48&v=4" width="64px"></a>
-
-<br>
-
-<h2>🔧 Usage</h2>
-<a href="https://open.vscode.dev/yushin-ito/plantDX">
-  <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
-</a>
-<br>
-<br>
-<ol>
-  <li>リポジトリをクローンする</li>
-  <p><pre><code>git clone https://github.com/yushin-ito/plantDX.git</code></pre></p>
-  <li>リポジトリに移動する</li>
-  <p><pre><code>cd app</code></pre></p>
-  <li>依存関係をインストールする</li>
-  <p><pre><code>npm install</code></pre></p>
-  <li>開発サーバーを起動する</li>
-  <p><pre><code>npm run dev</code></pre></p>
-</ol>
-
-<br>
-
 <h2>🔍 Background</h2>
 
 観光地として知られる鳥羽市では、多くのホテルや飲食店が立地しています。そのため、日常的に多くの植物性廃油が排出されており、再利用されることなく廃棄されているのが現状です。
@@ -59,7 +34,7 @@
 運転するために必要になる温度などのパラメーターの最適な値が判明していないというものです。
 つまり、ほとんどが<strong>手探り</strong>で運転されているのです。
 
-<strong>3. プラント運転の高度化<strong> <br/>
+<strong>3. プラント運転の高度化</strong> <br/>
 運転するためには高度な専門知識が要求さていて複雑になってきているというものです。
 つまり、限られた人しかプラントを運転することができません。
 
@@ -184,6 +159,25 @@ ATLANA では、画像から得られる情報をもとに<strong>攪拌率</str
 
 <br>
 
+<h2>🔧 Usage</h2>
+<a href="https://open.vscode.dev/yushin-ito/plantDX">
+  <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
+</a>
+<br>
+<br>
+<ol>
+  <li>リポジトリをクローンする</li>
+  <p><pre><code>git clone https://github.com/yushin-ito/plantDX.git</code></pre></p>
+  <li>リポジトリに移動する</li>
+  <p><pre><code>cd app</code></pre></p>
+  <li>依存関係をインストールする</li>
+  <p><pre><code>npm install</code></pre></p>
+  <li>開発サーバーを起動する</li>
+  <p><pre><code>npm run dev</code></pre></p>
+</ol>
+
+<br>
+
 <h2>🛠️ Technology</h2>
 <ul>
   <li><strong>Next.js</strong></li>
@@ -193,6 +187,12 @@ ATLANA では、画像から得られる情報をもとに<strong>攪拌率</str
   <li><strong>React Flow</strong></li>
   <li><strong>Recharts</strong></li>
 </ul>
+
+<br>
+
+<h2>👀 Author</h2>
+<a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
+<a href="https://github.com/walterairs"><img  src="https://avatars.githubusercontent.com/u/98316678?s=48&v=4" width="64px"></a>
 
 <br>
 
